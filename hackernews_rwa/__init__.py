@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 
-
 def create_app(test_config=None):
 	#create and configure the app
 	app = Flask(__name__, instance_relative_config=True)
@@ -28,8 +27,8 @@ def create_app(test_config=None):
 	from .db import db
 	db.init_app(app)
 
-#	from . import auth
-#	app.register_blueprint(auth.bp)
+	from . import users
+	app.register_blueprint(users.bp)
 
 #	from . import tasks
 #	app.register_blueprint(tasks.bp)
