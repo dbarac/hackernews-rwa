@@ -24,11 +24,15 @@ def create_app(test_config=None):
 	except OSError:
 		pass
 	
+	#setup database and api blueprints
 	from .db import db
 	db.init_app(app)
 
 	from . import users
 	app.register_blueprint(users.bp)
+
+	from . import sessions
+	app.register_blueprint(sessions.bp)
 
 #	from . import tasks
 #	app.register_blueprint(tasks.bp)
