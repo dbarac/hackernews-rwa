@@ -2,10 +2,13 @@ from flask import Blueprint, g, request
 from flask.views import MethodView
 from werkzeug.security import generate_password_hash
 from hackernews_rwa.db import get_db
+from hackernews_rwa.sessions import login_required
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 class UserAPI(MethodView):
+	max_username_len = 64
+	max_about_len = 512
 
 	def get(self, user_id):
 		if user_id is None:
@@ -13,6 +16,7 @@ class UserAPI(MethodView):
 		else:
 			#expose single user
 			pass
+
 
 	def post(self):
 		#create new user
@@ -27,6 +31,8 @@ class UserAPI(MethodView):
 		errors = {}
 		if not username:
 			errors['username'] = 'Username is required'
+		elif len(username) > self.max_username_len:
+			errors['username'] = 'Username length is more than 64 characters'
 		elif db_cursor.execute(
 			'SELECT id FROM user WHERE username = %s', (username,)
 		) and db_cursor.fetchone() is not None:
@@ -50,8 +56,34 @@ class UserAPI(MethodView):
 				"data": errors
 			}
 
+
+	@login_required
+	def delete(self, id):
+		db = get_db()
+		db_cursor = db.cursor()
+		#provjerit foreign key constraint u bazi kad se brise user (postovi, komentari)	
+		errors = {}
+		if int(g.user['id']) != id:
+			errors['id'] = 'user id does not match login id'
+		else:
+			#provjerit ako je delete uspio
+			db_cursor.execute('DELETE FROM user WHERE id = %s', (id,))
+			db.commit()
+
+		if not errors:
+			return {
+				"status": "success",
+				"data": None
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+
 user_view = UserAPI.as_view('user_api')
 bp.add_url_rule('/', view_func=user_view, methods=['POST'])
+bp.add_url_rule('/<int:id>', view_func=user_view, methods=['GET', 'DELETE'])
 
 		
 

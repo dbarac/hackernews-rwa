@@ -88,7 +88,7 @@ def load_logged_in_user():
 #that require a valid session cookie
 def login_required(view):
 	@functools.wraps(view)
-	def wrapped_view(**kwargs):
+	def wrapped_view(*args, **kwargs):
 		if g.user is None:
 			return {
 				"status": "fail",
@@ -96,6 +96,6 @@ def login_required(view):
 					"session": "login required"
 				}
 			}
-		return view(**kwargs)
+		return view(*args, **kwargs)
 	
 	return wrapped_view 
