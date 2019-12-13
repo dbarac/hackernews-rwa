@@ -34,8 +34,8 @@ def create_app(test_config=None):
 	from . import sessions
 	app.register_blueprint(sessions.bp)
 
-#	from . import tasks
-#	app.register_blueprint(tasks.bp)
+	from . import posts
+	app.register_blueprint(posts.bp)
 
 	#a simple page that says hello
 	@app.route('/hello')

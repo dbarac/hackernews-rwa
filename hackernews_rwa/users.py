@@ -84,7 +84,3 @@ class UserAPI(MethodView):
 user_view = UserAPI.as_view('user_api')
 bp.add_url_rule('/', view_func=user_view, methods=['POST'])
 bp.add_url_rule('/<int:id>', view_func=user_view, methods=['GET', 'DELETE'])
-
-		
-
-	
