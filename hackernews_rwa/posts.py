@@ -7,12 +7,15 @@ bp = Blueprint('posts', __name__, url_prefix='/posts')
 
 class PostAPI(MethodView):
 
-	def get(self, id):
-		if id is None:
+	def get(self, post_id):
+		if post_id is None:
 			return self.get_posts()
 		else:
-			#expose single post
-			return self.get_post(id)
+			if request.path.endswith('/comments'):
+				return self.get_post_comments(post_id)
+			else:
+				#expose single post
+				return self.get_post(post_id)
 
 
 	def get_post(self, id):
@@ -57,8 +60,75 @@ class PostAPI(MethodView):
 			}
 
 
+	def get_post_comments(self, post_id):
+		db = get_db()
+		db_cursor = db.cursor()
+
+		errors = {}
+		db_cursor.execute('SELECT * FROM post WHERE id = %s', (post_id,))
+		post = db_cursor.fetchone()
+		if not post:
+			errors['post_id'] = 'Post with given id does not exist'
+
+		if not errors:
+			db_cursor.execute('SELECT * FROM comment WHERE post_id = %s', (post_id,))
+			comments = db_cursor.fetchall()
+			return {
+				"status": "success",
+				"data": comments
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+
+
+	def post(self, post_id):
+		if post_id and request.path.endswith('/comments'):
+			return self.create_comment(post_id)
+		else:
+			return create_post(self)
+
+
 	@login_required
-	def post(self):
+	def create_comment(self, post_id):
+		request_data = request.get_json()
+		db = get_db()
+		db_cursor = db.cursor()
+		user_id = g.user['id']
+		body = request_data.get('body')
+
+		#if parent_id is found in query params,
+		#this comment will be a response to the comment with id = parent_id
+		parent_id = request.args.get('parent_id')
+		
+		errors = {}
+		if not post_id:
+			errors['post_id'] = 'Post is missing'
+		if not body:
+			errors['body'] = 'Content is missing.'
+
+		if not errors:
+			db_cursor.execute(
+				'INSERT INTO comment (body, post_id, user_id, parent_id)'
+				' VALUES (%s, %s, %s, %s)',
+				(body, post_id, user_id, parent_id)
+			)
+			db.commit()
+			return {
+				"status": "success",
+				"data": None
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+			
+
+	@login_required
+	def create_post(self):
 		#create new post
 		request_data = request.get_json()
 		title = request_data.get('title', None)
@@ -117,6 +187,7 @@ class PostAPI(MethodView):
 			}
 
 
+	@login_required
 	def patch(self, id):
 		request_data = request.get_json()
 		db = get_db()
@@ -155,4 +226,5 @@ class PostAPI(MethodView):
 
 post_view = PostAPI.as_view('post_api')
 bp.add_url_rule('/', view_func=post_view, defaults={'id': None}, methods=['GET', 'POST'])
-bp.add_url_rule('/<int:id>', view_func=post_view, methods=['GET', 'DELETE', 'PATCH'])
+bp.add_url_rule('/<int:post_id>', view_func=post_view, methods=['GET', 'DELETE', 'PATCH'])
+bp.add_url_rule('/<int:post_id>/comments', view_func=post_view, methods=['GET', 'POST'])
