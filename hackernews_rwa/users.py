@@ -14,8 +14,36 @@ class UserAPI(MethodView):
 		if user_id is None:
 			pass
 		else:
-			#expose single user
-			pass
+			if request.path.endswith('/posts'):
+				return self.get_posts_by_user(user_id)		
+			elif request.path.endswith('/comments'):
+				#return self.get_comments_by_user(user_id)
+				pass
+	
+
+	def get_posts_by_user(self, user_id):
+		db = get_db()
+		db_cursor = db.cursor()
+
+		errors = {}
+		db_cursor.execute('SELECT * FROM user WHERE id = %s', (user_id))
+		user = db_cursor.fetchone()
+		if not user:
+			errors['user_id'] = 'User with given id does not exist'
+
+		if not errors:
+			db_cursor.execute('SELECT * FROM post WHERE user_id = %s', (user_id))
+			posts = db_cursor.fetchall()
+			return {
+				"status": "success",
+				"data": posts
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+
 
 
 	def post(self):
@@ -84,3 +112,4 @@ class UserAPI(MethodView):
 user_view = UserAPI.as_view('user_api')
 bp.add_url_rule('/', view_func=user_view, methods=['POST'])
 bp.add_url_rule('/<int:id>', view_func=user_view, methods=['GET', 'DELETE'])
+bp.add_url_rule('/<int:user_id>/posts', view_func=user_view, methods=['GET'])
