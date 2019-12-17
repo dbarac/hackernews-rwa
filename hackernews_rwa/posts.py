@@ -85,8 +85,13 @@ class PostAPI(MethodView):
 
 
 	def post(self, post_id):
-		if post_id and request.path.endswith('/comments'):
-			return self.create_comment(post_id)
+		if post_id: 
+			if request.path.endswith('/comments'):
+				return self.create_comment(post_id)
+			elif request.path.endswith('/upvotes'):
+				return self.create_vote(post_id, positive=True) 
+			elif request.path.endswith('/downvotes'):
+				return self.create_vote(post_id, positive=False)
 		else:
 			return create_post(self)
 
@@ -157,9 +162,91 @@ class PostAPI(MethodView):
 				"data": errors
 			}
 
+	
+	@login_required
+	def create_vote(self, post_id, positive):
+		db = get_db()
+		db_cursor = db.cursor()
+
+		errors = {}
+		db_cursor.execute(
+			'SELECT * FROM post_vote WHERE user_id = %s AND post_id = %s',
+			(g.user['id'], post_id)
+		)
+		vote = db_cursor.fetchone()
+		if vote:
+			if positive and vote['positive']:
+				errors['vote'] = 'Positive vote already exists.'
+			elif not positive and not vote['positive']:
+				errors['vote'] = 'Negative vote already exists.'
+
+		if not errors:
+			if vote:
+				db_cursor.execute(
+					'UPDATE post_vote SET positive = %s' 
+					' WHERE user_id = %s and post_id = %s',
+					(positive, g.user['id'], post_id)
+				)
+			else:
+				db_cursor.execute(
+					'INSERT INTO post_vote (user_id, post_id, positive)'
+					' VALUES (%s, %s, %s)', (g.user['id'], post_id, positive)
+				)
+			db.commit()
+			return {
+				"status": "success",
+				"data": None
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+
+
+	def delete(self, post_id):
+		if request.path.endswith('/upvotes'):
+			return self.delete_vote(post_id) 
+		elif request.path.endswith('/downvotes'):
+			return self.delete_vote(post_id)
+		else:
+			return self.delete_post(post_id)
+
 
 	@login_required
-	def delete(self, id):
+	def delete_vote(self, post_id):
+		db = get_db()
+		db_cursor = db.cursor()
+
+		errors = {}
+		db_cursor.execute(
+			'SELECT * FROM post_vote WHERE user_id = %s AND post_id = %s',
+			(g.user['id'], post_id)
+		)
+		vote = db_cursor.fetchone()
+		if not vote:
+			errors['vote'] = 'Vote does not exist.'
+
+		if not errors:
+			db_cursor.execute(
+				'DELETE FROM post_vote WHERE user_id = %s and post_id = %s',
+				(g.user['id'], post_id)
+			)
+			db.commit()
+			return {
+				"status": "success",
+				"data": None
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+
+
+
+	@login_required
+	def delete_post(self, id):
 		db = get_db()
 		db_cursor = db.cursor()
 		#provjerit foreign key constraint u bazi kad se brise user (postovi, komentari)	
@@ -228,3 +315,5 @@ post_view = PostAPI.as_view('post_api')
 bp.add_url_rule('/', view_func=post_view, defaults={'id': None}, methods=['GET', 'POST'])
 bp.add_url_rule('/<int:post_id>', view_func=post_view, methods=['GET', 'DELETE', 'PATCH'])
 bp.add_url_rule('/<int:post_id>/comments', view_func=post_view, methods=['GET', 'POST'])
+bp.add_url_rule('<int:post_id>/upvotes', view_func=post_view, methods=['POST', 'DELETE'])
+bp.add_url_rule('<int:post_id>/downvotes', view_func=post_view, methods=['POST', 'DELETE'])
