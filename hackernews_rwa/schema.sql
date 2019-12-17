@@ -27,7 +27,7 @@ CREATE TABLE post (
 	url VARCHAR(512),
 	body VARCHAR(512),
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	edited BIT DEFAULT 0,
+	edited BOOLEAN,
 	votes INTEGER DEFAULT 0,
 	user_id INTEGER NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES user (id)
@@ -38,9 +38,11 @@ CREATE TABLE comment (
 	body VARCHAR(512),
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	votes INTEGER DEFAULT 0,
-	edited BIT DEFAULT 0,
+	edited BOOLEAN,
+	post_id INTEGER NOT NULL,
 	parent_id INTEGER DEFAULT NULL, 
 	user_id INTEGER NOT NULL,
+	FOREIGN KEY (post_id) REFERENCES post (id),
 	FOREIGN KEY (user_id) REFERENCES user (id),
 	FOREIGN KEY (parent_id) REFERENCES comment (id)
 );
@@ -48,7 +50,7 @@ CREATE TABLE comment (
 CREATE TABLE post_vote (
 	user_id INTEGER,
 	post_id INTEGER,
-	positive BIT DEFAULT 0,
+	positive BOOLEAN,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (user_id, post_id),
 	FOREIGN KEY (user_id) REFERENCES user (id),
@@ -58,9 +60,58 @@ CREATE TABLE post_vote (
 CREATE TABLE comment_vote (
 	user_id INTEGER,
 	comment_id INTEGER,
-	positive BIT DEFAULT 0,
+	positive BOOLEAN,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (user_id, comment_id),
 	FOREIGN KEY (user_id) REFERENCES user (id),
 	FOREIGN KEY (comment_id) REFERENCES comment (id)
 );
+
+DELIMITER //
+
+#database triggers to keep vote count updated and avoid calculating on every read
+CREATE TRIGGER post_vote_insert_trig AFTER INSERT ON post_vote 
+FOR EACH ROW
+BEGIN
+	DECLARE diff TINYINT(1);
+	IF (NEW.positive = 1) THEN
+		SET diff = 1;
+	ELSE
+		SET diff = -1;
+	END IF;
+
+	UPDATE post
+		SET votes = votes + diff
+	WHERE id = NEW.post_id;
+END//
+
+CREATE TRIGGER post_vote_update_trig AFTER UPDATE ON post_vote 
+FOR EACH ROW
+BEGIN
+	DECLARE diff TINYINT(1);
+	IF (NEW.positive = 1) THEN
+		SET diff = 2;
+	ELSE
+		SET diff = -2;
+	END IF;
+
+	UPDATE post
+		SET votes = votes + diff
+	WHERE id = NEW.post_id;
+END//
+
+CREATE TRIGGER post_vote_delete_trig AFTER DELETE ON post_vote 
+FOR EACH ROW
+BEGIN
+	DECLARE diff TINYINT(1);
+	IF (OLD.positive = 1) THEN
+		SET diff = -1;
+	ELSE
+		SET diff = 1;
+	END IF;
+
+	UPDATE post
+		SET votes = votes + diff
+	WHERE id = OLD.post_id;
+END//
+DELIMITER ;
