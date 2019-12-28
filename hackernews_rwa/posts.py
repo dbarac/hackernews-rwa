@@ -1,6 +1,6 @@
 from flask import Blueprint, g, request
 from flask.views import MethodView
-from hackernews_rwa.db import get_db
+from hackernews_rwa.db import get_db, paginate
 from hackernews_rwa.sessions import login_required
 
 bp = Blueprint('posts', __name__, url_prefix='/posts')
@@ -40,12 +40,16 @@ class PostAPI(MethodView):
 			}
 
 
+	@paginate
 	def get_posts(self):
 		db = get_db()
 		db_cursor = db.cursor()
 
 		errors = {}
-		db_cursor.execute('SELECT * FROM post')
+		db_cursor.execute(
+			'SELECT * FROM post LIMIT %s OFFSET %s',
+			(g.limit, g.offset)
+			)
 		posts = db_cursor.fetchall()
 		#posts = [post for post in posts]
 		if not errors:
@@ -59,7 +63,8 @@ class PostAPI(MethodView):
 				"data": errors
 			}
 
-
+	
+	@paginate
 	def get_post_comments(self, post_id):
 		db = get_db()
 		db_cursor = db.cursor()
@@ -71,7 +76,10 @@ class PostAPI(MethodView):
 			errors['post_id'] = 'Post with given id does not exist'
 
 		if not errors:
-			db_cursor.execute('SELECT * FROM comment WHERE post_id = %s', (post_id,))
+			db_cursor.execute(
+				'SELECT * FROM comment WHERE post_id = %s LIMIT %s OFFSET %s',
+				(post_id, g.limit, g.offset)
+			)
 			comments = db_cursor.fetchall()
 			return {
 				"status": "success",
@@ -312,7 +320,7 @@ class PostAPI(MethodView):
 
 
 post_view = PostAPI.as_view('post_api')
-bp.add_url_rule('/', view_func=post_view, defaults={'id': None}, methods=['GET', 'POST'])
+bp.add_url_rule('/', view_func=post_view, defaults={'post_id': None}, methods=['GET', 'POST'])
 bp.add_url_rule('/<int:post_id>', view_func=post_view, methods=['GET', 'DELETE', 'PATCH'])
 bp.add_url_rule('/<int:post_id>/comments', view_func=post_view, methods=['GET', 'POST'])
 bp.add_url_rule('<int:post_id>/upvotes', view_func=post_view, methods=['POST', 'DELETE'])
