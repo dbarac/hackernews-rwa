@@ -11,22 +11,25 @@ def paginate(view):
 	def wrapped_view(*args, **kwargs):
 		page_size = request.args.get('page_size')
 		page = request.args.get('page')
-		print(page_size)
 		errors = {}
 		if not page_size:
 			page_size = 20
 		if not page:
-			page = 1 
-		if not page_size.isnumeric() or not page.isnumeric():
-			errors['pagination'] = 'page and page_size should be integers'
+			page = 1
+		if isinstance(page, str) and not page.isnumeric():
+			errors['pagination'] = 'page query argument should be an integer'
+		elif isinstance(page_size, str) and not page_size.isnumeric():
+			errors['pagination'] = 'page_size should be an integer'
 			return {
 				"status": "fail",
 				"errors": errors
 			}
+
 		page = int(page)
 		page_size = int(page_size)
+		#calculate limit and offset for SQL query
+		#and save in g object until the end of the request
 		g.limit = page_size
-		#calculate offset for SQL query
 		g.offset = (page - 1) * page_size
 		return view(*args, **kwargs)
 	
