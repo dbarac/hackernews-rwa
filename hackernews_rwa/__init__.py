@@ -37,6 +37,9 @@ def create_app(test_config=None):
 	from . import posts
 	app.register_blueprint(posts.bp)
 
+	from . import comments
+	app.register_blueprint(comments.bp)
+
 	#a simple page that says hello
 	@app.route('/hello')
 	def hello():
