@@ -22,11 +22,11 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
 
    Na localhost:5000/api/users (HTTP metoda treba biti **POST**) poslati ovo:
    ```javascript
-{
-  	"username": "ime123",
-  	"password": "lozinka123"
-  	"email": "example@mail.com"
-}
+   {
+     	"username": "ime123",
+     	"password": "lozinka123"
+     	"email": "example@mail.com"
+   }
    ```
 
  Email polje nije obavezno.
