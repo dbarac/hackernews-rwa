@@ -27,7 +27,7 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
   	"password": "lozinka123"
   	"email": "example@mail.com"
 }
-```
+   ```
 
  Email polje nije obavezno.
 
