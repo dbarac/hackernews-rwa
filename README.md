@@ -29,29 +29,29 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
    }
    ```
 
- Email polje nije obavezno.
+   Email polje nije obavezno.
 
- Ovo je primjer JavaScript funkcije koja šalje zahtjev i ispisuje odgovor u konzolu.
-  ```javascript
-	async function register_user(uname, pass) {
-		let url = "/api/users";
-		let data = {username: uname,password: pass}
-		try {
-			let response = await fetch(url, {
-				method: 'POST',
-				body: JSON.stringify(data),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			response = await response.json();
-			console.log('Register response:', JSON.stringify(response));
-			return response.success;
-		} catch (error) {
-			console.log('Error: ', error);
-		}
-	}
- ```
+   Ovo je primjer JavaScript funkcije koja šalje zahtjev i ispisuje odgovor u konzolu.
+   ```javascript
+   async function register_user(uname, pass) {
+	   let url = "/api/users";
+	   let data = {username: uname,password: pass}
+	   try {
+		   let response = await fetch(url, {
+			   method: 'POST',
+			   body: JSON.stringify(data),
+			   headers: {
+			   		'Content-Type': 'application/json'
+			   }
+		   });
+		   response = await response.json();
+		   console.log('Register response:', JSON.stringify(response));
+		   return response.success;
+	   } catch (error) {
+	   		console.log('Error: ', error);
+	   }
+   }
+   ```
 
 2. Ulogiraj se:
 
