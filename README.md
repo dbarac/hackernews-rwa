@@ -113,23 +113,21 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
  
 ### Detaljniji opis cijelog API-ja
 
-Glavni dijelovi API-ja su posts, comments, users i sessions. Općenito GET metoda služi za dohvat nekog resursa ili podresursa, POST za stvaranje novog, PATCH za update nekih vrijednosti, i DELETE za brisanje.
+Glavni dijelovi API-ja su posts, comments, users i sessions. Općenito GET metoda služi za dohvat nekog resursa ili podresursa, POST za stvaranje novog, PATCH za update nekih vrijednosti, i DELETE za brisanje. Za stvaranje resursa (osim usera i session-a) treba biti ulogiran.
 
 #### Users API
-
 
 `GET`
 
 Endpoint | Opis 
 --- | --- 
 /api/users/id | Dohvati korisnika po ID-u 
-/api/users/id/posts | Dohvati objave nekog korisnika po ID-u 
+/api/users/id/posts | Dohvati objave nekog korisnika po njegovom ID-u, npr. /api/users/5/posts
 /api/users/id/comments | Dohvati komentare nekog korisnika po ID-u  
-
 
 `POST`
 
-Endpoint | Opis | Argumenti
+Endpoint | Opis | Argumenti (JSON)
 --- | --- | ---
 /api/users | Stvori novog korisnika | username, password, email (nije obavezan) 
 
@@ -139,4 +137,52 @@ Endpoint | Opis
 --- | --- 
 /api/users | Obriši svoj korisnički račun (ID računa se pronađe u dobivenom session cookie-u. 
 
+#### Sessions API
 
+Služi za login i logout.
+
+`POST`
+
+Endpoint | Opis | Argumenti (JSON)
+--- | --- | ---
+/api/sessions | Stvori novi session (ulogiraj se). Korisniku se vraća potpisani session cookie koji sadrži njegov ID i koristi se za stvaranje resursa i kao dozvola za pristup postojećim. | username, password
+
+`DELETE`
+
+Endpoint | Opis
+--- | --- 
+/api/sessions | Prekini trenutni session (logout). Nakon slanja zahtjeva briše se korisnikov session cookie.
+
+#### Posts API
+
+`GET`
+
+Endpoint | Opis | Argumenti (query parameters)
+--- | --- | ---
+/api/posts | Dohvati objave. Moguće ih je sortirati po starosti, rising i top. Očekuje se da će biti puno objava pa se ne dobivaju sve odjednom nego po stranicama. Način sortiranja i raspon traženih objava se određuje pomoću query parametara npr. /api/posts?page_size=20&page=2&sort_by=rising | page (default=1), page_size (default=20), sort_by (default=rising)
+/api/posts/id | Dohvati jednu objavu po ID-u objave |
+/api/posts/id/comments | Dohvati komentare sve komentare na neku objavu |
+
+`POST`
+
+Endpoint | Opis | Argumenti (JSON)
+--- | --- | ---
+/api/posts | Stvori novu objavu | title, url (nije obavezan), body (nije obavezan)
+/api/posts/id/comments | Stvori komentar na neku objavu. Komentar može biti odgovor na drugi komentar. | body (sadržaj komentara), parent_id (nije obavezno, ako parent_id postoji, novi komentar će bit odgovor na komentar koji ima poslani ID)
+/api/posts/id/votes | Stvori pozitivan ili negativan glas za neku objavu. | direction: 1 (positive) ili -1 (negative)
+
+`PATCH`
+
+Endpoint | Opis | Argumenti (JSON)
+--- | --- | --- 
+/api/posts/id | Uredi sadržaj objave (body). Naslov i url se ne mogu urediti. | body
+
+`DELETE`
+
+Endpoint | Opis
+--- | --- 
+/api/posts/id | Obriši jednu od svojih objava
+
+#### Comments API
+
+Ovo treba napisat 
