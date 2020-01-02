@@ -161,7 +161,7 @@ Endpoint | Opis | Argumenti (query parameters)
 --- | --- | ---
 /api/posts | Dohvati objave. Moguće ih je sortirati po starosti, rising i top. Očekuje se da će biti puno objava pa se ne dobivaju sve odjednom nego po stranicama. Način sortiranja i raspon traženih objava se određuje pomoću query parametara npr. /api/posts?page_size=20&page=2&sort_by=rising | page (default=1), page_size (default=20), sort_by (default=rising)
 /api/posts/id | Dohvati jednu objavu po ID-u objave |
-/api/posts/id/comments <img width=400/> | Dohvati komentare sve komentare na neku objavu |
+/api/posts/id/comments <img width=590/> | Dohvati komentare sve komentare na neku objavu |
 
 `POST`
 
