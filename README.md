@@ -12,7 +12,7 @@ ovo treba napisat
 
 API služi za rad sa resursima web aplikacije (stvaranje novih i dohvat ili uređivanje postojećih), npr. stvaranje novog korisnika, dohvat objava koje je stvorio neki korisnik, komentara itd.
 
-Argumenti se ovisno o zahtjevu šalju kao url query parametri ili u JSON formatu. Svi odgovori koje vraća API pisani su u [JSend](https://github.com/omniti-labs/jsend) formatu.
+Argumenti se ovisno o zahtjevu šalju kao url query parametri ili u JSON formatu. Svi JSON odgovori koje vraća API pisani su u [JSend](https://github.com/omniti-labs/jsend) formatu.
 
 U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
 
@@ -112,3 +112,28 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
    ```
  
 ### Detaljniji opis cijelog API-ja
+
+Glavni dijelovi API-ja su posts, comments, users i sessions. Općenito GET metoda služi za dohvat nekog resursa ili podresursa, POST za stvaranje novog, PATCH za update nekih vrijednosti, i DELETE za brisanje.
+
+#### Users API
+
+
+`GET`
+Endpoint | Opis 
+--- | --- | --- | ---
+/api/users/id | Dohvati korisnika po ID-u 
+/api/users/id/posts | Dohvati objave nekog korisnika po ID-u 
+/api/users/id/comments | Dohvati komentare nekog korisnika po ID-u  
+
+
+`POST`
+Endpoint | Opis | Argumenti
+--- | --- | --- | ---
+/api/users | Stvori novog korisnika | username, password, email (nije obavezan) 
+
+`DELETE`
+Endpoint | Opis
+--- | --- | 
+/api/users | Obriši svoj korisnički račun (ID računa se pronađe u dobivenom session cookie-u. 
+
+
