@@ -119,6 +119,7 @@ Glavni dijelovi API-ja su posts, comments, users i sessions. Općenito GET metod
 
 
 `GET`
+
 Endpoint | Opis 
 --- | --- 
 /api/users/id | Dohvati korisnika po ID-u 
@@ -127,11 +128,13 @@ Endpoint | Opis
 
 
 `POST`
+
 Endpoint | Opis | Argumenti
 --- | --- | ---
 /api/users | Stvori novog korisnika | username, password, email (nije obavezan) 
 
 `DELETE`
+
 Endpoint | Opis
 --- | --- 
 /api/users | Obriši svoj korisnički račun (ID računa se pronađe u dobivenom session cookie-u. 
