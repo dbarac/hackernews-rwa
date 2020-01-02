@@ -137,6 +137,8 @@ Endpoint | Opis
 --- | --- 
 /api/users | Obriši svoj korisnički račun (ID računa se pronađe u dobivenom session cookie-u. 
 
+***
+
 #### Sessions API
 
 Služi za login i logout.
@@ -152,6 +154,8 @@ Endpoint | Opis | Argumenti (JSON)
 Endpoint | Opis
 --- | --- 
 /api/sessions | Prekini trenutni session (logout). Nakon slanja zahtjeva briše se korisnikov session cookie.
+
+***
 
 #### Posts API
 
@@ -182,6 +186,8 @@ Endpoint  | Opis | Argumenti (JSON)
 Endpoint | Opis
 --- | --- 
 /api/posts/id | Obriši jednu od svojih objava
+
+***
 
 #### Comments API
 
