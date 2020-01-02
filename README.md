@@ -157,7 +157,7 @@ Endpoint | Opis
 
 `GET`
 
-Endpoint | Opis | Argumenti (query parameters)
+Endpoint <img width=200/> | Opis | Argumenti (query parameters)
 --- | --- | ---
 /api/posts | Dohvati objave. Moguće ih je sortirati po starosti, rising i top. Očekuje se da će biti puno objava pa se ne dobivaju sve odjednom nego po stranicama. Način sortiranja i raspon traženih objava se određuje pomoću query parametara npr. /api/posts?page_size=20&page=2&sort_by=rising | page (default=1), page_size (default=20), sort_by (default=rising)
 /api/posts/id | Dohvati jednu objavu po ID-u objave |
@@ -165,7 +165,7 @@ Endpoint | Opis | Argumenti (query parameters)
 
 `POST`
 
-Endpoint | Opis | Argumenti (JSON)
+Endpoint <img width=200/> | Opis | Argumenti (JSON)
 --- | --- | ---
 /api/posts | Stvori novu objavu | title, url (nije obavezan), body (nije obavezan)
 /api/posts/id/comments | Stvori komentar na neku objavu. Komentar može biti odgovor na drugi komentar. | body (sadržaj komentara), parent_id (nije obavezno, ako parent_id postoji, novi komentar će bit odgovor na komentar koji ima poslani ID)
@@ -173,7 +173,7 @@ Endpoint | Opis | Argumenti (JSON)
 
 `PATCH`
 
-Endpoint | Opis | Argumenti (JSON)
+Endpoint  | Opis | Argumenti (JSON)
 --- | --- | --- 
 /api/posts/id | Uredi sadržaj objave (body). Naslov i url se ne mogu urediti. | body
 
@@ -186,3 +186,4 @@ Endpoint | Opis
 #### Comments API
 
 Ovo treba napisat 
+
