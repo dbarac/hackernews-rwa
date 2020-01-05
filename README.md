@@ -191,5 +191,26 @@ Endpoint | Opis
 
 #### Comments API
 
-Ovo treba napisat 
+`GET`
 
+Endpoint | Opis 
+--- | --- | ---
+/api/comments/id | Dohvati jedan komentar po ID-u 
+
+`POST`
+
+Endpoint | Opis | Argumenti (JSON)
+--- | --- | ---
+/api/comments/id/votes <img width=380/> | Stvori pozitivan ili negativan glas za neki komentar. | direction: 1 (positive) ili -1 (negative)
+
+`PATCH`
+
+Endpoint  | Opis | Argumenti (JSON)
+--- | --- | --- 
+/api/comments/id | Uredi sadržaj komentara (body) | body
+
+`DELETE`
+
+Endpoint | Opis
+--- | --- 
+/api/comments/id | Obriši jedan od svojih komentara
