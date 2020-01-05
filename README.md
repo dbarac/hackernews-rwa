@@ -194,7 +194,7 @@ Endpoint | Opis
 `GET`
 
 Endpoint | Opis 
---- | --- | ---
+--- | ---
 /api/comments/id | Dohvati jedan komentar po ID-u 
 
 `POST`
