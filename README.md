@@ -4,9 +4,25 @@
 
 Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stranici objave mogu biti rangirane po starosti, top, ili rising. Korisnici mogu komentirati objave, odgovarati na komentare, uređivati svoje komentare i glasati za druge komentare. Za svakog korisnika se mogu dohvatiti njegove objave i komentari.
 
-## Instalacija
+## Instalacija i pokretanje aplikacije
 
-ovo treba napisat
+1. klonirati git repo
+   
+   > git clone https://github.com/dbarac/hackernews-rwa.git
+
+2. baza
+
+   Instalirat MySQL 8.
+
+   Pokrenuti SQL skriptu za stvaranje usera, i definiranje baze.
+
+   > mysql < schema.sql
+
+3. Python okruženje
+   
+   Aplikacija je testirana sa Python verzijom 3.7
+
+   
 
 ## API dokumentacija
 
@@ -201,7 +217,7 @@ Endpoint | Opis
 
 Endpoint | Opis | Argumenti (JSON)
 --- | --- | ---
-/api/comments/id/votes <img width=380/> | Stvori pozitivan ili negativan glas za neki komentar. | direction: 1 (positive) ili -1 (negative)
+/api/comments/id/votes <img width=200/> | Stvori pozitivan ili negativan glas za neki komentar. | direction: 1 (positive) ili -1 (negative)
 
 `PATCH`
 
