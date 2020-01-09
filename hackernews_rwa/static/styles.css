@@ -6,6 +6,8 @@ body{
 	height: 100%;
 }
 
+
+
 #myBtn {
   display: none;
   position: fixed;
@@ -33,7 +35,6 @@ body{
 	grid-template-columns: 1fr;
 	border-bottom: 1px solid #8a8a8a;
 	height: 5vh;
-
 }
 
 .nav-wrapper{
@@ -79,9 +80,13 @@ body{
 	border-bottom: 1px solid #c8aa6e;
 }
 
-.mainbody{
-	background-color:lightgrey ;
+#mainbody{
+	background-color: lightgrey;
   	height: 94vh; /*ne znam drugacije namijestit about sign in  i login da bude velicina ekrana na fill */ 
 }
 
+#mainbody.dark-mode{
+	background-color: black;
+	color: white;
+}
 
