@@ -6,6 +6,12 @@ import pymysql.cursors
 db = MySQL(cursorclass = pymysql.cursors.DictCursor)
 get_db = db.get_db
 
+ranking_sql = {
+	"top": "ORDER BY votes DESC",
+	"rising": "ORDER BY votes / (1 + timestampdiff(hour, now(), created)) DESC",
+	"new": "ORDER BY created DESC"
+}
+
 def paginate(view):
 	@functools.wraps(view)
 	def wrapped_view(*args, **kwargs):
