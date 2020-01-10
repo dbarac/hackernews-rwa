@@ -22,7 +22,7 @@ Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stran
    
    Aplikacija je testirana sa Python verzijom 3.7
 
-   
+**trebam jos toga napisat za instalaciju**
 
 ## API dokumentacija
 
