@@ -1,7 +1,9 @@
+from collections import deque
 from flask import Blueprint, g, request
 from flask.views import MethodView
-from hackernews_rwa.db import get_db, paginate
+from hackernews_rwa.db import get_db, paginate, ranking_sql
 from hackernews_rwa.sessions import login_required
+
 
 bp = Blueprint('posts', __name__, url_prefix='/posts')
 
@@ -45,13 +47,16 @@ class PostAPI(MethodView):
 		db = get_db()
 		db_cursor = db.cursor()
 
+		sort_by = request.args.get('sort_by')
+		if sort_by not in ('top', 'rising', 'new'):
+			sort_by = 'rising'
+		
 		errors = {}
 		db_cursor.execute(
-			'SELECT * FROM post LIMIT %s OFFSET %s',
+			'SELECT * FROM post ' + ranking_sql[sort_by] + ' LIMIT %s OFFSET %s',
 			(g.limit, g.offset)
 			)
 		posts = db_cursor.fetchall()
-		#posts = [post for post in posts]
 		if not errors:
 			return {
 				"status": "success",
@@ -64,7 +69,6 @@ class PostAPI(MethodView):
 			}
 
 	
-	@paginate
 	def get_post_comments(self, post_id):
 		db = get_db()
 		db_cursor = db.cursor()
@@ -77,10 +81,11 @@ class PostAPI(MethodView):
 
 		if not errors:
 			db_cursor.execute(
-				'SELECT * FROM comment WHERE post_id = %s LIMIT %s OFFSET %s',
-				(post_id, g.limit, g.offset)
+				'SELECT * FROM comment WHERE post_id = %s',
+				(post_id,)
 			)
 			comments = db_cursor.fetchall()
+			#comments = create_comment_threads(deque(comments))
 			return {
 				"status": "success",
 				"data": comments
@@ -90,6 +95,22 @@ class PostAPI(MethodView):
 				"status": "fail",
 				"data": errors
 			}
+
+	
+	def create_comment_threads(comments, prior_depth = {}):
+		"""
+		Recursively build comment hierarchy from a queue of all comments.
+		All child comments will be stored in a list as a property of the parent comment.
+		"""
+
+		comments = deque(comments)
+		structured_comments = {}
+		#a collection of comments with current depth e.g. all root comments for depth 0 
+		current_depth = {} 
+		
+		for comment in comments:
+			if comment['parent'] == None or comment['parent_id'] in current_depth:
+				structured_comments[comment['id']] = comment
 
 
 	def post(self, post_id):

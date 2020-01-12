@@ -1,8 +1,8 @@
-/*CREATE USER IF NOT EXISTS 'hackernews'@'%' IDENTIFIED BY 'hackernews';
+CREATE USER IF NOT EXISTS 'hackernews'@'%' IDENTIFIED BY 'hackernews';
 CREATE DATABASE hackernews;
 GRANT ALL PRIVILEGES ON hackernews.* TO 'hackernews'@'%';
 FLUSH PRIVILEGES;
-*/
+
 USE hackernews;
 
 DROP TABLE IF EXISTS comment_vote;
@@ -38,6 +38,7 @@ CREATE TABLE comment (
 	body VARCHAR(512),
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	votes INTEGER DEFAULT 0,
+	depth INTEGER DEFAULT 0,
 	edited BOOLEAN,
 	post_id INTEGER NOT NULL,
 	parent_id INTEGER DEFAULT NULL, 
@@ -111,6 +112,53 @@ BEGIN
 	END IF;
 
 	UPDATE post
+		SET votes = votes + diff
+	WHERE id = OLD.post_id;
+END//
+DELIMITER ;
+
+
+CREATE TRIGGER comment_vote_insert_trig AFTER INSERT ON comment_vote 
+FOR EACH ROW
+BEGIN
+	DECLARE diff TINYINT(1);
+	IF (NEW.positive = 1) THEN
+		SET diff = 1;
+	ELSE
+		SET diff = -1;
+	END IF;
+
+	UPDATE comment
+		SET votes = votes + diff
+	WHERE id = NEW.post_id;
+END//
+
+CREATE TRIGGER comment_vote_update_trig AFTER UPDATE ON comment_vote 
+FOR EACH ROW
+BEGIN
+	DECLARE diff TINYINT(1);
+	IF (NEW.positive = 1) THEN
+		SET diff = 2;
+	ELSE
+		SET diff = -2;
+	END IF;
+
+	UPDATE comment
+		SET votes = votes + diff
+	WHERE id = NEW.post_id;
+END//
+
+CREATE TRIGGER comment_vote_delete_trig AFTER DELETE ON comment_vote 
+FOR EACH ROW
+BEGIN
+	DECLARE diff TINYINT(1);
+	IF (OLD.positive = 1) THEN
+		SET diff = -1;
+	ELSE
+		SET diff = 1;
+	END IF;
+
+	UPDATE comment
 		SET votes = votes + diff
 	WHERE id = OLD.post_id;
 END//

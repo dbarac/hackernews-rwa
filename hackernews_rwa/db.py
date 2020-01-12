@@ -8,7 +8,7 @@ get_db = db.get_db
 
 ranking_sql = {
 	"top": "ORDER BY votes DESC",
-	"rising": "ORDER BY votes / (1 + timestampdiff(hour, now(), created)) DESC",
+	"rising": "ORDER BY votes / (0.1 + timestampdiff(hour, created, now())) DESC",
 	"new": "ORDER BY created DESC"
 }
 
