@@ -34,7 +34,7 @@ Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stran
    >$ flask run
 
    Frontend će biti dostupan na locahost:5000/static/ a backend na locahost:5000/api/
-**trebam jos toga napisat za instalaciju**
+   Primjer korištenja backenda je na localhost:5000/static/primjer_za_backend.html
 
 ## API dokumentacija
 
