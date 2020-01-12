@@ -12,16 +12,28 @@ Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stran
 
 2. baza
 
-   Instalirat MySQL 8.
+   Instalirati i pokrenuti MySQL 8.
 
-   Pokrenuti SQL skriptu za stvaranje usera, i definiranje baze.
+   Pokrenuti SQL skriptu za stvaranje usera i definiranje baze.
 
-   > mysql < schema.sql
+   >$ mysql -p < hackernews_rwa/schema.sql
 
-3. Python okruženje
+3. Python okruženje i instalacija potrebnih paketa
    
    Aplikacija je testirana sa Python verzijom 3.7
 
+   Nakon instalacije Python-a instalirati pakete i aplikaciju
+
+   >$ pip install -r requirements.txt
+   >$ pip install -e .
+
+4. Postavljanje environment varijabli i pokretanje aplikacije
+
+   >$ export FLASK_APP=hackernews_rwa
+   >$ export FLASK_ENV=development
+   >$ flask run
+
+   Frontend će biti dostupan na locahost:5000/static/ a backend na locahost:5000/api/
 **trebam jos toga napisat za instalaciju**
 
 ## API dokumentacija

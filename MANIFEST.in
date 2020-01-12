@@ -1,0 +1,4 @@
+include hackernews_rwa/schema.sql
+graft hackernews_rwa/static
+graft hackernews_rwa/templates
+global-exclude *.pyc
