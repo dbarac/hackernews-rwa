@@ -24,13 +24,13 @@ Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stran
 
    Nakon instalacije Python-a instalirati pakete i aplikaciju
 
-   >$ pip install -r requirements.txt
+   >$ pip install -r requirements.txt  
    >$ pip install -e .
 
 4. Postavljanje environment varijabli i pokretanje aplikacije
 
-   >$ export FLASK_APP=hackernews_rwa
-   >$ export FLASK_ENV=development
+   >$ export FLASK_APP=hackernews_rwa  
+   >$ export FLASK_ENV=development  
    >$ flask run
 
    Frontend će biti dostupan na locahost:5000/static/ a backend na locahost:5000/api/
