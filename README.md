@@ -24,13 +24,13 @@ Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stran
 
    Nakon instalacije Python-a instalirati pakete i aplikaciju
 
-   >$ pip install -r requirements.txt
+   >$ pip install -r requirements.txt  
    >$ pip install -e .
 
 4. Postavljanje environment varijabli i pokretanje aplikacije
 
-   >$ export FLASK_APP=hackernews_rwa
-   >$ export FLASK_ENV=development
+   >$ export FLASK_APP=hackernews_rwa  
+   >$ export FLASK_ENV=development  
    >$ flask run
 
    Frontend će biti dostupan na locahost:5000/static/ a backend na locahost:5000/api/
@@ -48,7 +48,7 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
 
 1. Napravi novi korisnički račun:
 
-   Na localhost:5000/api/users (HTTP metoda treba biti **POST**) poslati ovo:
+   Na localhost:5000/api/users/ (HTTP metoda treba biti **POST**) poslati ovo:
    ```javascript
    {
      "username": "ime123",
@@ -83,7 +83,7 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
 
 2. Ulogiraj se:
 
-   Na localhost:5000/api/sesions (HTTP metoda treba biti **POST**) poslati ovo:
+   Na localhost:5000/api/sessions/ (HTTP metoda treba biti **POST**) poslati ovo:
    ```javascript
    {
      "username": "ime123",
@@ -95,7 +95,7 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
  
 3. Stvori novu objavu:
 
-   Na localhost:5000/api/posts (HTTP metoda treba biti **POST**) poslati ovo:
+   Na localhost:5000/api/posts/ (HTTP metoda treba biti **POST**) poslati ovo:
    ```javascript
    {
      "title": "API design tips",
@@ -108,7 +108,7 @@ U ostatku dokumentacije se pretpostavlja da je API dostupan na localhost:5000/
 
 4. Dohvati postojeće objave:
 
-   Poslati zahtjev na localhost:5000/api/posts (HTTP metoda treba biti **GET**)
+   Poslati zahtjev na localhost:5000/api/posts/ (HTTP metoda treba biti **GET**)
 
    Ovo je primjer odgovora koji se dobije:
    ```javascript
@@ -157,13 +157,13 @@ Endpoint | Opis
 
 Endpoint | Opis | Argumenti (JSON)
 --- | --- | ---
-/api/users | Stvori novog korisnika | username, password, email (nije obavezan) 
+/api/users/ | Stvori novog korisnika | username, password, email (nije obavezan) 
 
 `DELETE`
 
 Endpoint | Opis
 --- | --- 
-/api/users | Obriši svoj korisnički račun (ID računa se pronađe u dobivenom session cookie-u. 
+/api/users/ | Obriši svoj korisnički račun (ID računa se pronađe u dobivenom session cookie-u. 
 
 ***
 
@@ -175,13 +175,13 @@ Služi za login i logout.
 
 Endpoint | Opis | Argumenti (JSON)
 --- | --- | ---
-/api/sessions | Stvori novi session (ulogiraj se). Korisniku se vraća potpisani session cookie koji sadrži njegov ID i koristi se za stvaranje resursa i kao dozvola za pristup postojećim. | username, password
+/api/sessions/ | Stvori novi session (ulogiraj se). Korisniku se vraća potpisani session cookie koji sadrži njegov ID i koristi se za stvaranje resursa i kao dozvola za pristup postojećim. | username, password
 
 `DELETE`
 
 Endpoint | Opis
 --- | --- 
-/api/sessions | Prekini trenutni session (logout). Nakon slanja zahtjeva briše se korisnikov session cookie.
+/api/sessions/ | Prekini trenutni session (logout). Nakon slanja zahtjeva briše se korisnikov session cookie.
 
 ***
 
@@ -191,7 +191,7 @@ Endpoint | Opis
 
 Endpoint | Opis | Argumenti (query parameters)
 --- | --- | ---
-/api/posts | Dohvati objave. Moguće ih je sortirati po starosti, rising i top. Očekuje se da će biti puno objava pa se ne dobivaju sve odjednom nego po stranicama. Način sortiranja i raspon traženih objava se određuje pomoću query parametara npr. /api/posts?page_size=20&page=2&sort_by=rising | page (default=1), page_size (default=20), sort_by (default=rising)
+/api/posts/ | Dohvati objave. Moguće ih je sortirati po starosti, rising i top. Očekuje se da će biti puno objava pa se ne dobivaju sve odjednom nego po stranicama. Način sortiranja i raspon traženih objava se određuje pomoću query parametara npr. /api/posts?page_size=20&page=2&sort_by=rising | page (default=1), page_size (default=20), sort_by (default=rising, moguće je još top i new)
 /api/posts/id | Dohvati jednu objavu po ID-u objave |
 /api/posts/id/comments <img width=700/> | Dohvati komentare sve komentare na neku objavu |
 
@@ -199,7 +199,7 @@ Endpoint | Opis | Argumenti (query parameters)
 
 Endpoint | Opis | Argumenti (JSON)
 --- | --- | ---
-/api/posts | Stvori novu objavu | title, url (nije obavezan), body (nije obavezan)
+/api/posts/ | Stvori novu objavu | title, url (nije obavezan), body (nije obavezan)
 /api/posts/id/comments | Stvori komentar na neku objavu. Komentar može biti odgovor na drugi komentar. | body (sadržaj komentara), parent_id (nije obavezno, ako parent_id postoji, novi komentar će bit odgovor na komentar koji ima poslani ID)
 /api/posts/id/votes <img width=380/> | Stvori pozitivan ili negativan glas za neku objavu. | direction: 1 (positive) ili -1 (negative)
 
