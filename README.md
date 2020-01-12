@@ -33,7 +33,7 @@ Korisnici objavljuju linkove za koje drugi korisnici glasaju. Na početnoj stran
    >$ export FLASK_ENV=development  
    >$ flask run
 
-   Frontend će biti dostupan na locahost:5000/static/ a backend na locahost:5000/api/
+   Frontend će biti dostupan na locahost:5000/static/ a backend na locahost:5000/api/  
    Primjer korištenja backenda je na localhost:5000/static/primjer_za_backend.html
 
 ## API dokumentacija
