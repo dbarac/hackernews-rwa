@@ -4,7 +4,7 @@ from flask.views import MethodView
 from werkzeug.security import generate_password_hash, check_password_hash
 from hackernews_rwa.db import get_db
 
-bp = Blueprint('sessions', __name__, url_prefix='/sessions')
+bp = Blueprint('sessions', __name__, url_prefix='/api/sessions')
 
 class SessionAPI(MethodView):
 	max_username_len = 64

@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 from hackernews_rwa.db import get_db
 from hackernews_rwa.sessions import login_required
 
-bp = Blueprint('users', __name__, url_prefix='/users')
+bp = Blueprint('users', __name__, url_prefix='/api/users')
 
 class UserAPI(MethodView):
 	max_username_len = 64
@@ -133,6 +133,6 @@ class UserAPI(MethodView):
 
 user_view = UserAPI.as_view('user_api')
 bp.add_url_rule('/', view_func=user_view, methods=['POST'])
-bp.add_url_rule('/<int:id>', view_func=user_view, methods=['GET', 'DELETE'])
+bp.add_url_rule('/<int:user_id>', view_func=user_view, methods=['GET', 'DELETE'])
 bp.add_url_rule('/<int:user_id>/posts', view_func=user_view, methods=['GET'])
 bp.add_url_rule('/<int:user_id>/comments', view_func=user_view, methods=['GET'])

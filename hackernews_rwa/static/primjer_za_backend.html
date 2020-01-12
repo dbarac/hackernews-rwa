@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Backend primjer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="login-form" >
+  <h3>Create an account:</h3>
+  <form id="register">
+  <div class="container">
+    <label for="username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" required>
+
+    <label for="password"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" required>
+        
+    <button type="submit">Register</button>
+  </div>
+</form>
+</div>
+
+
+<script>
+  
+//setup register listener
+register_form = document.getElementById("register");
+if (register_form) {
+  register_form.addEventListener("submit", function (event) {
+    event.preventDefault(); //prevent form submitting to host
+    register_user().then((response) => {
+      if (response.status === 'True') {
+        window.alert("uspjesno kreiran racun");
+      } else {
+        alert(JSON.stringify(response))
+      }
+    });
+  });
+}
+
+async function register_user() {
+  let form = document.getElementById("register");
+  let uname = form["username"].value;
+  let pass = form["password"].value;
+
+  let url = "/api/users/";
+  let data = {username: uname,password: pass}
+  console.log(JSON.stringify(data));
+  try {
+    let response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    response = await response.json();
+    console.log('Register response:', JSON.stringify(response));
+    return response;
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+}
+</script>
+</body>
+</html>

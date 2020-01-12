@@ -5,7 +5,7 @@ from hackernews_rwa.db import get_db, paginate, ranking_sql
 from hackernews_rwa.sessions import login_required
 
 
-bp = Blueprint('posts', __name__, url_prefix='/posts')
+bp = Blueprint('posts', __name__, url_prefix='/api/posts')
 
 class PostAPI(MethodView):
 

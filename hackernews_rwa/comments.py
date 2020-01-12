@@ -3,7 +3,7 @@ from flask.views import MethodView
 from hackernews_rwa.db import get_db
 from hackernews_rwa.sessions import login_required
 
-bp = Blueprint('comments', __name__, url_prefix='/comments')
+bp = Blueprint('comments', __name__, url_prefix='/api/comments')
 
 class CommentAPI(MethodView):
 
