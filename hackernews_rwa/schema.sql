@@ -115,7 +115,6 @@ BEGIN
 		SET votes = votes + diff
 	WHERE id = OLD.post_id;
 END//
-DELIMITER ;
 
 
 CREATE TRIGGER comment_vote_insert_trig AFTER INSERT ON comment_vote 
@@ -130,7 +129,7 @@ BEGIN
 
 	UPDATE comment
 		SET votes = votes + diff
-	WHERE id = NEW.post_id;
+	WHERE id = NEW.comment_id;
 END//
 
 CREATE TRIGGER comment_vote_update_trig AFTER UPDATE ON comment_vote 
@@ -145,7 +144,7 @@ BEGIN
 
 	UPDATE comment
 		SET votes = votes + diff
-	WHERE id = NEW.post_id;
+	WHERE id = NEW.comment_id;
 END//
 
 CREATE TRIGGER comment_vote_delete_trig AFTER DELETE ON comment_vote 
@@ -160,6 +159,6 @@ BEGIN
 
 	UPDATE comment
 		SET votes = votes + diff
-	WHERE id = OLD.post_id;
+	WHERE id = OLD.comment_id;
 END//
 DELIMITER ;
