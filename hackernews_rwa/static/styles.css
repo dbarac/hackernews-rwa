@@ -80,6 +80,66 @@ body{
 	border-bottom: 1px solid #c8aa6e;
 }
 
+/*###############################*/
+
+.filterandsort{
+	display: flex;
+	position: absolute;
+	flex-direction: row;
+	padding: 30px;
+}
+
+.filter{
+	padding-right: 5px;
+}
+
+.sort{
+	padding-left: 5px;
+}
+
+.filterbtn, .sortbtn{
+	background-color: transparent;
+	border: 2px solid #c8aa6e;
+	color: black;
+	text-align: center;
+	font-size: 15px;
+	height: 30px;
+	width: 60px;
+}
+
+.filterbtn:hover, .sortbtn:hover{
+	background-color: #c8aa6e;
+	cursor: pointer;
+}
+
+.filter-content, .sort-content{
+	display: none;
+	position: absolute;
+	background-color: black;
+	min-width: 160px;
+}
+
+.filter-content a, .sort-content a{
+	color: #8a8a8a;
+  	padding: 12px 16px;
+  	text-decoration: none;
+  	display: block;
+}
+
+.filter-content a:hover, .sort-content a:hover {
+	color: #c8aa6e;
+}
+
+.filter:hover .filter-content, .sort:hover .sort-content{
+	display: block;
+}
+
+.filter:hover .filterbtn, .sort:hover .sortbtn{
+	background-color: #c8aa6e;
+
+}
+
+
 #mainbody{
 	background-color: lightgrey;
   	height: 94vh; /*ne znam drugacije namijestit about sign in  i login da bude velicina ekrana na fill */ 
