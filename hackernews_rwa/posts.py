@@ -81,14 +81,14 @@ class PostAPI(MethodView):
 
 		if not errors:
 			db_cursor.execute(
-				'SELECT * FROM comment WHERE post_id = %s',
+				'SELECT * FROM comment WHERE post_id = %s ORDER BY depth, created',
 				(post_id,)
 			)
 			comments = db_cursor.fetchall()
 			#comments = create_comment_threads(deque(comments))
 			return {
 				"status": "success",
-				"data": comments
+				"data": self.create_comment_threads(deque(comments))
 			}
 		else:
 			return {
@@ -97,20 +97,36 @@ class PostAPI(MethodView):
 			}
 
 	
-	def create_comment_threads(comments, prior_depth = {}):
+	def create_comment_threads(self, comments_dq, prior_depth_comments = {}, depth = 0):
 		"""
-		Recursively build comment hierarchy from a queue of all comments.
+		Recursively build comment hierarchy from a dequeue of all comments.
+		comments_dq is sorted by depth and timedate of creation.
 		All child comments will be stored in a list as a property of the parent comment.
+		The function is called recursively for each depth.
 		"""
-
-		comments = deque(comments)
-		structured_comments = {}
+		if len(comments_dq) == 0:
+			return
 		#a collection of comments with current depth e.g. all root comments for depth 0 
-		current_depth = {} 
+		current_depth_comments = {} 
 		
-		for comment in comments:
-			if comment['parent'] == None or comment['parent_id'] in current_depth:
-				structured_comments[comment['id']] = comment
+		while len(comments_dq) > 0 and comments_dq[0]['depth'] == depth:
+			comment = comments_dq.popleft()
+			comment['children'] = {}
+			current_depth_comments[comment['id']] = comment
+			if comment['parent_id'] in prior_depth_comments:
+				prior_depth_comments[comment['parent_id']]['children'][comment['id']] = comment
+
+		self.create_comment_threads(comments_dq, current_depth_comments, depth + 1)
+		if depth == 0:
+			structured_comments = current_depth_comments
+			return self.comment_dicts_to_lists(structured_comments)
+			
+
+	def comment_dicts_to_lists(self, comments):
+		for comment in comments.values():
+			if comment['children']:
+				comment['children'] = self.comment_dicts_to_lists(comment['children'])
+		return list(comments.values())
 
 
 	def post(self, post_id):
@@ -122,7 +138,7 @@ class PostAPI(MethodView):
 			elif request.path.endswith('/downvotes'):
 				return self.create_vote(post_id, positive=False)
 		else:
-			return create_post(self)
+			return self.create_post()
 
 
 	@login_required
@@ -132,22 +148,34 @@ class PostAPI(MethodView):
 		db_cursor = db.cursor()
 		user_id = g.user['id']
 		body = request_data.get('body')
+		depth = 0
 
-		#if parent_id is found in query params,
-		#this comment will be a response to the comment with id = parent_id
-		parent_id = request.args.get('parent_id')
-		
 		errors = {}
 		if not post_id:
 			errors['post_id'] = 'Post is missing'
 		if not body:
 			errors['body'] = 'Content is missing.'
 
+		#if parent_id is found in query params,
+		#this comment will be a response to the comment with id = parent_id
+		parent_id = request_data.get('parent_id')
+		if parent_id:
+			db_cursor.execute(
+				'SELECT depth, post_id FROM comment WHERE id = %s', (parent_id,)
+			)
+			parent_comment = db_cursor.fetchone()
+			if not parent_comment:
+				errors['parent'] = 'Comment with id = parent_id does not exist'
+			elif parent_comment['post_id'] != post_id:
+				errors['parent'] = 'Parent comment is not related to selected post'
+			else:
+				depth = parent_comment['depth'] + 1
+
 		if not errors:
 			db_cursor.execute(
-				'INSERT INTO comment (body, post_id, user_id, parent_id)'
-				' VALUES (%s, %s, %s, %s)',
-				(body, post_id, user_id, parent_id)
+				'INSERT INTO comment (body, post_id, user_id, parent_id, depth)'
+				' VALUES (%s, %s, %s, %s, %s)',
+				(body, post_id, user_id, parent_id, depth)
 			)
 			db.commit()
 			return {
