@@ -1,0 +1,196 @@
+*{
+	box-sizing: border-box;/*da logo stane u header*/
+}
+
+body{
+	padding: 0px;
+	margin: 0px;
+	background-color: #f6f6f6;
+	font-family: 'Raleway', sans-serif;
+}
+
+.clearfix::after { /*sluzi za content*/
+	content: '';
+	display: block;
+	clear: both;
+}
+
+header{
+	background-color: #1d9c72;
+	height: 66px;
+}
+
+header *{
+	color: white; /*boja slova u headeru*/
+}
+
+header .logo {
+	float:left;
+	height: inherit;
+	margin-left: 2em;
+}
+
+header .logo-text{
+	margin: 9px;
+	font-family: 'Candal', 'serif';
+}
+
+header .logo-text span{
+	color: black;
+}
+header .menu-toggle{
+	display:none;
+}
+
+header ul{
+	float:right;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;					
+}
+
+header ul li{
+	float: left;
+	position:relative;
+}
+
+header ul li ul{ 
+	position: absolute;
+	top: 66px;
+	right: 0px;
+	width: 180px;
+	display: none;
+	z-index: 88888;
+}
+
+header ul li:hover ul{
+	display:block;
+}
+
+header ul li ul li{
+	width: 100%; /*duzina dropdowna bude cijele duzeine boxa*/
+}
+
+header ul li ul li a{
+	padding: 10px;
+	background: white;
+	color: #444;
+}
+
+header ul li ul li a.logout{
+	color:red;
+}
+
+header ul li ul li a:hover {
+	background-color:  #d5d6d6; 
+}
+
+header ul li a{
+	display:block;
+	padding: 21px;
+	font-size: 1.1em;
+	text-decoration: none;
+}
+
+header ul li a:hover{
+	background: #006669;
+	transition: 0.1s;
+}
+
+/*	CONTENT______________________________________________________________________________*/
+	.content {
+		width: 80%;
+		margin: 100px auto 50px;
+		border: 1px solid red;
+	}
+	.content .counter-content{
+		width: 3%;
+		height: 80px;
+		float: left;
+		font-size: 24px;
+		text-align: center;
+		border: 1px solid green;
+		min-width: 48px;
+	}
+	.content .main-content{
+		width: 77%;
+		float: left;
+		border: 1px solid blue;
+	}
+	.content .admin-content{
+		width: 20%;
+		float: left;
+		border: 1px solid pink;
+	}
+	.content .main-content .recent-post-title a{
+		text-decoration: none;
+		color: black;
+	}
+	.content .main-content .recent-post-title{
+		margin: 5px;
+
+	}
+	.content .main-content .post-preview{
+		margin: 5px;
+		text-decoration: none;
+	}
+	.green:hover{ color:#1d9c72}
+
+
+
+	/*viska___________________________________________________________________________________*/
+	
+
+
+/*MEDIA  REQUIRMENTS_________________________________*/
+
+@media only screen and (max-width: 750px) {
+	header{
+		position: relative;
+	}
+	header ul{
+		width: 100%;
+		background-color: #0E94A0;
+		max-height: 0px;
+		overflow: hidden;
+	}
+	.showing{
+		max-height: 100em;
+	}
+
+	header ul li{
+		width: 100%;
+	}
+	header ul li ul{
+		position: static;
+		display: block;
+		width: 100%;
+	}
+		header ul li ul li a{
+		padding: 10px;
+		background:  #0E94A0;
+		color: white;
+		padding-left: 50px;
+	}
+
+		header ul li ul li a:hover{
+			background: #006669;
+		}	
+
+		header ul li ul li a.logout{
+			color:red;
+	}
+		header .menu-toggle{
+		display: block;
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		font-size: 1.9em;
+	}
+	header .logo {
+	margin-left: 2em;
+	}
+
+}
+
+
