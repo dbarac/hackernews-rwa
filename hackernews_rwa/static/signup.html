@@ -1,55 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset ="utf-8"/>
-	<title>Sign up</title>
-	<link rel="stylesheet" href="login_styles.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<!-- Font Awesome -->
+	<script src="https://kit.fontawesome.com/0e77fb0d99.js" crossorigin="anonymous"></script>
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Candal|Lora|Raleway|Titillium+Web&display=swap" rel="stylesheet"> 
+
+	<!-- Custom Styling -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>SignUp</title>
 </head>
-</script>
 <body>
-	<div class="container">
-		<div class="nav-wrapper">
-			<div class="left-side">
-				<div class="nav-link-wrapper">
-					<a href="index.html">Home</a>
-				</div>
-
-				<div class="nav-link-wrapper">
-					<a href="about.html">About</a>
-				</div>
-
-			</div>
-
-			<div class="right-side">
-				<div class="nav-link-wrapper">
-					<a href="signup.html" style ="color: #c8aa6e">Sign up</a>
-				</div>
-
-				<div class="nav-link-wrapper">
-					<a href="login.html">Log in</a>
-				</div>
-			</div>
+	<header>
+		<div class="logo">
+			<h1 class="logo-text"><span>Na</span>Slov</h1>
 		</div>
-		<div class="mainbody">
-			<div class="flex-container-signup">
-			<form class="login-form">
-				<input type="text" class="signup" autofocus="true" required="true" placeholder="Name">
-				<input type="text" class="signup" required="true" placeholder="Surname">
-				<input type="text" class="signup-username" required="true" placeholder="Username">
-				<input type="email" class="signup-email"  required="true" placeholder="Email">
-				<input type="password" class="signup-password" required="true" placeholder="Password">
-				<input type="password" class="signup-repeated-password" required="true" placeholder="Confirm password">
-				<input type="submit" name="Sign-up" value="Sign up" class="signup-submit">
+		<i class="fa fa-bars menu-toggle"></i>
+		<ul class="nav">
+			<li><a href="#">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Services</a></li>
+			<!--<li><a href="#">Sing Up</a></li>
+			<li><a href="#">Login</a></li> -->
+			<li>
+				<a href="#">
+					<i class="fa fa-user"></i>
+					User7374
+					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
+				</a>
+				<ul>
+					<li><a href="#">Dashboard</a></li>
+					<li><a href="#" class="logout">Logout</a></li>
+				</ul>
+			</li>
+		</ul>
+	</header>
 
-				<p class="no-account" style="color: #403f3b">
-				Already have an account? &nbsp;
-				<a href="login.html">Log in</a>
-				</p>
-			</form>
-	  		</div>
-  		</div>
-  </div>
+	<div class="auth-content">
+		
+		<form action="signup.html" method="post">
+			<h2 class="form-title">Sign Up</h2>
+
+			<!---<div class="msg success error">
+				<li>Username required</li>
+			</div> --->
+
+			<div>
+				<label>Username</label>
+				<input type="text" name="username" class="text-input">
+			</div>
+			<div>
+				<label>Email</label>
+				<input type="email" name="email" class="text-input">
+			</div>
+			<div>
+				<label>Password</label>
+				<input type="password" name="password" class="text-input">
+			</div>
+			<div>
+				<label>Password Confirmation</label>
+				<input type="password" name="passwordConf" class="text-input">
+			</div>
+			<div>
+				<button type="submit" name="signup-btn" class="btn btn-big">Sign Up</button>
+			</div>
+			<p>Already signed in? <a href="login.html">Login</a></p>
+		</form>
+
+	</div>
 
 
+	<!-- JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
+
+	<!-- Custom Script-->
+	<script src="scripts.js"></script>
 </body>
 </html>

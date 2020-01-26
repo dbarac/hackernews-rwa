@@ -15,6 +15,29 @@ body{
 	clear: both;
 }
 
+/* MESSAGES FOR AUTHORISATION PAGES */
+.msg{
+	width: 100%;
+	margin: 5px auto;
+	padding: 8px;
+	border-radius: 5px;
+	list-style: none;
+}
+
+.success{
+	color: #3a6e3a;
+	border: 1px solid #3a6e3a;
+	background: #bcf5bc;
+}
+
+.error{
+	color: #884b4b;
+	border: 1px solid #884b4b;
+	background: #f5bcbc;	
+}
+
+/* HEADER */
+
 header{
 	background-color: #1d9c72;
 	height: 66px;
@@ -135,10 +158,6 @@ header ul li a:hover{
 		text-decoration: none;
 	}
 	.green:hover{ color:#1d9c72}
-
-
-
-	/*viska___________________________________________________________________________________*/
 	
 
 
@@ -193,4 +212,67 @@ header ul li a:hover{
 
 }
 
+.btn{
+	padding: .5rem 1rem;
+	background: #1d9c72;
+	color: white;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+	font-size: 1.08em;
+	font-family: 'Lora', 'serif';
+}
 
+.btn-big{
+	padding: .7rem 1.3rem;
+	line-height: 1.3rem;
+}
+
+.btn:hover{
+	color: white;
+	background: #005255;
+}
+
+.text-input{
+	padding: 0.7rem 1rem;
+	display: block;
+	width: 100%;
+	border-radius: 5px;
+	border: 1px solid #e0e0e0;
+	outline: none;
+	color: #444;
+	line-height: 1.5rem;
+	font-size: 1.2em;
+	font-family: 'Lora', 'serif';
+}
+
+
+/* AUTHORIZATION PAGES */
+.auth-content{
+	width: 30%;
+	margin: 50px auto;
+	padding: 20px;
+	background: white;
+	border-radius: 5px;
+}
+
+.auth-content .form-title{
+	text-align: center;
+	color: #1d9c72;
+	font-size: 2em;
+	font-family: 'Lora', 'serif';
+}
+
+.auth-content form div{
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+	font-size: 1.08em;
+	font-family: 'Lora', 'serif';
+}
+
+.auth-content form p{
+	text-align: center;
+}
+
+.auth-content form p a{
+	text-decoration: underline;
+}
