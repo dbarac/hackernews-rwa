@@ -157,7 +157,9 @@ header ul li a:hover{
 		margin: 5px;
 		text-decoration: none;
 	}
-	.green:hover{ color:#1d9c72}
+	.green:hover{
+	 color:#1d9c72;
+	}
 	
 
 
@@ -211,7 +213,7 @@ header ul li a:hover{
 	}
 
 }
-
+/*_______*/
 .btn{
 	padding: .5rem 1rem;
 	background: #1d9c72;
@@ -277,4 +279,9 @@ header ul li a:hover{
 	text-decoration: underline;
 }
 
-/*-----------------------------------------------*/
+/*-profile page----------------------------------------------*/
+
+
+
+
+/*-profile page----------------------------------------------*/
