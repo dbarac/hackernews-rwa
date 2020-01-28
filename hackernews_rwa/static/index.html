@@ -42,6 +42,37 @@
 		</ul>
 	</header>
 
+<!-- Task template -->
+<template id="post-template">
+	<div class="content clearfix">
+
+			<div class="counter-content">
+				<p>1. <i class="fa fa-chevron-up fa-lg green" aria-hidden="true"></i></p>
+			</div>	
+
+			<!--Main Content -->
+			<div class="main-content">
+				<h1 class="recent-post-title"><a href="single.html">Različit tekst tekst različit. Različit tekst tekst različit. </a></h1>
+				<div class="post">
+					<div class="post-preview">
+						<i class="votes">/NumberOfUpvotes\</i>
+						&nbsp;
+						<a><i class="far fa-user">User7374</i></a>
+						&nbsp;
+						<i class="far calendar">Jan 24, 2020</i>
+						<p class="preview-text"></p>
+					</div>
+
+				</div>
+
+
+
+			</div>
+
+		</div>
+</template>
+
+		<div id="b"></div>
 	<!-- Content -->
 		<div class="content clearfix">
 
@@ -50,7 +81,7 @@
 			</div>	
 
 			<!--Main Content -->
-			<div class="main-content">
+			<div class="main-content" id="b">
 				<h1 class="recent-post-title"><a href="single.html">Različit tekst tekst različit. Različit tekst tekst različit. </a></h1>
 				<div class="post">
 					<div class="post-preview">
@@ -64,16 +95,62 @@
 
 				</div>
 
-			</div>
-			<!--Main Content -->
 
-			<div class="sidebar"></div>	
+
+			</div>
 
 		</div>
 
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
 
+
+	<script>
+async function get_posts() {
+	let url = "/api/posts";
+	try {
+		let response = await fetch(url, {
+			method: 'GET'
+		});
+		//parse JSON response into native JavaScript object
+		posts = await response.json();
+		return posts.data;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+var posts = 0;
+
+async function load_posts() {
+	//delete currently shown tasks and load tasks again from api
+	//delete_tasks();
+	let posts = await get_posts();
+	posts.forEach(show_post);
+}
+
+function delete_tasks() {
+	let tasks_container = document.getElementById("task-container");
+	while (tasks_container.firstChild) {
+    	tasks_container.removeChild(tasks_container.firstChild);
+	}
+}
+async function show_post(post) {
+	let post_template = document.getElementById("post-template");
+	let templateContent = post_template.content.cloneNode(true);
+	let h1 = templateContent.querySelector("h1");
+	h1.innerHTML = post.title;
+	let votes = templateContent.querySelector(".votes");
+	votes.innerHTML = post.votes;
+	//let p = templateContent.querySelector("p");
+    //p.id = task.id;
+	let posts_container = document.getElementById("b");
+	posts_container.appendChild(templateContent);
+}
+
+
+await
+	</script>
 	<!-- Custom Script-->
 	<script src="scripts.js"></script>
 </body>
