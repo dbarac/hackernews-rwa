@@ -14,7 +14,7 @@
 	<!-- Custom Styling -->
 	<link rel="stylesheet" href="style.css">
 
-	<title>Login</title>
+	<title>Stvori objavu</title>
 </head>
 <body>
 	<header>
@@ -44,19 +44,23 @@
 
 	<div class="auth-content">
 		
-		<form action="login.html" id="login">
-			<h2 class="form-title">Login</h2>
+		<form action="stvori_objavu.html" id="objava">
+			<h2 class="form-title">Stvori objavu</h2>
 
 			<div>
-				<label>Username</label>
-				<input type="text" name="username" class="text-input">
+				<label>Naslov</label>
+				<input type="text" name="title" class="text-input">
 			</div>
 			<div>
-				<label>Password</label>
-				<input type="password" name="password" class="text-input">
+				<label>URL</label>
+				<input type="url" name="url" class="text-input">
 			</div>
 			<div>
-				<button type="submit" name="login-btn" class="btn btn-big">Login</button>
+				<label>Body</label>
+				<input type="text" name="body" class="text-input">
+			</div>
+			<div>
+				<button type="submit" name="objava-btn" class="btn btn-big">Objavi</button>
 			</div>
 			<p>Don't have an account? <a href="signup.html">Sign Up</a></p>
 		</form>
@@ -73,13 +77,13 @@
 <script>  
 
 //setup login listener
-login_form = document.getElementById("login");
-if (login_form) {
-  login_form.addEventListener("submit", function (event) {
+objava_form = document.getElementById("objava");
+if (objava_form) {
+  objava_form.addEventListener("submit", function (event) {
     event.preventDefault(); //prevent form submitting to host
-    login_user().then((response) => {
+    make_post().then((response) => {
       if (response.status === 'success') {
-        window.alert("Korisnik je uspjesno ulogiran");
+        window.alert("Objava je uspjesno kreirana");
         window.location.replace("index.html");
       } else {
         alert(JSON.stringify(response))
@@ -88,13 +92,14 @@ if (login_form) {
   });
 }
 
-async function login_user() {
-  let form = document.getElementById("login");
-  let uname = form["username"].value;
-  let pass = form["password"].value;
+async function make_post() {
+  let form = document.getElementById("objava");
+  let naslov = form["title"].value;
+  let urlic = form["url"].value;
+  let bod = form["body"].value;
 
-  let url = "/api/sessions/";
-  let data = {username: uname,password: pass}
+  let url = "/api/posts/";
+  let data = {title: naslov, url: urlic, body:bod}
   console.log(JSON.stringify(data));
   try {
     let response = await fetch(url, {

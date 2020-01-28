@@ -55,5 +55,4 @@ def create_app(test_config=None):
 			"hello": "Hello, World"
 		}
 
-
 	return app

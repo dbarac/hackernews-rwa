@@ -32,7 +32,7 @@ if (register_form) {
   register_form.addEventListener("submit", function (event) {
     event.preventDefault(); //prevent form submitting to host
     register_user().then((response) => {
-      if (response.status === 'True') {
+      if (response.status === 'success') {
         window.alert("uspjesno kreiran racun");
       } else {
         alert(JSON.stringify(response))

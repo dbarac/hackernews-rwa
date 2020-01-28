@@ -117,7 +117,7 @@ header ul li a{
 
 header ul li a:hover{
 	background: #006669;
-	transition: 0.1s;
+	
 }
 
 /*	CONTENT______________________________________________________________________________*/
@@ -276,3 +276,5 @@ header ul li a:hover{
 .auth-content form p a{
 	text-decoration: underline;
 }
+
+/*-----------------------------------------------*/
