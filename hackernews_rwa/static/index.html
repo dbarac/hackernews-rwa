@@ -25,9 +25,9 @@
 		<ul class="nav">
 			<li><a href="index.html" >Home</a></li>
 			<li><a href="#">About</a></li>
-			<li style="display: none;"><a href="signup.html">Sing Up</a></li>
-			<li style="display: none;"><a href="login.html">Login</a></li> 
-			<li style="display: none;">
+			<li style="display: none;" id="signup"><a href="signup.html">Sing Up</a></li>
+			<li style="display: none;" id="login"><a href="login.html">Login</a></li> 
+			<li style="display: none;" id="user">
 				<a href="#">
 					<i class="fa fa-user"></i>
 					User7374
@@ -75,6 +75,32 @@
 
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
+
+	<!---<script>
+	let s = document.getElementById("signup");
+	let l = document.getElementById("login");
+	let u = document.getElementById("user");
+
+	if (get_cookie()) {
+		s.style["display"] = "inline";
+		l.style["display"] = "inline";
+		u.style["display"] = "inline";
+		alert('cookie dohvacen');
+	}
+
+	async function get_cookie(){
+		let url = '/api/sessions';
+		try {
+			let response = await fetch(url, {
+				method: 'GET'
+			});
+			response = await response.json();
+			return response;
+		} catch(error){
+			console.log('Error: ', error);
+		}
+	}
+	</script> -->
 
 	<script>
 async function get_posts() {
