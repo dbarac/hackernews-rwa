@@ -25,7 +25,11 @@ class PostAPI(MethodView):
 		db_cursor = db.cursor()
 
 		errors = {}
-		db_cursor.execute('SELECT * FROM post WHERE id = %s', (id,))
+		db_cursor.execute(
+			'SELECT * FROM post INNER JOIN on post.user_id = u.id'
+			' (SELECT id, username FROM user) u WHERE id = %s', 
+			(id,)
+		)
 		post = db_cursor.fetchone()
 		if post is None:
 			errors['post_id'] = 'Post not found.'
@@ -53,7 +57,9 @@ class PostAPI(MethodView):
 		
 		errors = {}
 		db_cursor.execute(
-			'SELECT * FROM post ' + ranking_sql[sort_by] + ' LIMIT %s OFFSET %s',
+			'SELECT * FROM post INNER JOIN'
+			' (SELECT id, username FROM user) u ON post.user_id = u.id'
+			+ ranking_sql[sort_by] + ' LIMIT %s OFFSET %s',
 			(g.limit, g.offset)
 			)
 		posts = db_cursor.fetchall()
@@ -81,7 +87,9 @@ class PostAPI(MethodView):
 
 		if not errors:
 			db_cursor.execute(
-				'SELECT * FROM comment WHERE post_id = %s ORDER BY depth, created',
+				'SELECT * FROM comment INNER JOIN'
+				' (SELECT id, username FROM user) u on comment.user_id = u.id'
+				' WHERE post_id = %s ORDER BY depth, created',
 				(post_id,)
 			)
 			comments = db_cursor.fetchall()
@@ -133,10 +141,8 @@ class PostAPI(MethodView):
 		if post_id: 
 			if request.path.endswith('/comments'):
 				return self.create_comment(post_id)
-			elif request.path.endswith('/upvotes'):
-				return self.create_vote(post_id, positive=True) 
-			elif request.path.endswith('/downvotes'):
-				return self.create_vote(post_id, positive=False)
+			elif request.path.endswith('/votes'):
+				return self.create_vote(post_id) 
 		else:
 			return self.create_post()
 
@@ -221,9 +227,15 @@ class PostAPI(MethodView):
 
 	
 	@login_required
-	def create_vote(self, post_id, positive):
+	def create_vote(self, post_id):
 		db = get_db()
 		db_cursor = db.cursor()
+		request_data = request.get_json()
+
+		positive = True
+		direction = request_data.get('direction', None)
+		if direction and int(direction) == -1:
+			positive = False
 
 		errors = {}
 		db_cursor.execute(
@@ -372,5 +384,4 @@ post_view = PostAPI.as_view('post_api')
 bp.add_url_rule('/', view_func=post_view, defaults={'post_id': None}, methods=['GET', 'POST'])
 bp.add_url_rule('/<int:post_id>', view_func=post_view, methods=['GET', 'DELETE', 'PATCH'])
 bp.add_url_rule('/<int:post_id>/comments', view_func=post_view, methods=['GET', 'POST'])
-bp.add_url_rule('<int:post_id>/upvotes', view_func=post_view, methods=['POST', 'DELETE'])
-bp.add_url_rule('<int:post_id>/downvotes', view_func=post_view, methods=['POST', 'DELETE'])
+bp.add_url_rule('<int:post_id>/votes', view_func=post_view, methods=['POST', 'DELETE'])

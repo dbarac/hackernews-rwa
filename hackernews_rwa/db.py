@@ -7,9 +7,9 @@ db = MySQL(cursorclass = pymysql.cursors.DictCursor)
 get_db = db.get_db
 
 ranking_sql = {
-	"top": "ORDER BY votes DESC",
-	"rising": "ORDER BY votes / (0.1 + timestampdiff(hour, created, now())) DESC",
-	"new": "ORDER BY created DESC"
+	"top": " ORDER BY votes DESC",
+	"rising": " ORDER BY votes / (0.1 + timestampdiff(hour, created, now())) DESC",
+	"new": " ORDER BY created DESC"
 }
 
 def paginate(view):
