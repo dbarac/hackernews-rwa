@@ -94,7 +94,7 @@ if (register_form) {
     register_user().then((response) => {
       if (response.status === 'success') {
         window.alert("Uspjesno kreiran racun");
-        window.location.replace("index.html");
+        window.location.replace("login.html");
       } else {
         alert(JSON.stringify(response))
       }
