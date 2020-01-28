@@ -25,17 +25,23 @@
 		<ul class="nav">
 			<li><a href="index.html" >Home</a></li>
 			<li><a href="#">About</a></li>
+<<<<<<< HEAD
 			<li style="display: none;" id="signup"><a href="signup.html">Sing Up</a></li>
 			<li style="display: none;" id="login"><a href="login.html">Login</a></li> 
 			<li style="display: none;" id="user">
+=======
+			<li id="signup-link" style="display: none;"><a href="signup.html">Sing Up</a></li>
+			<li id="login-link" style="display: none;"><a href="login.html">Login</a></li> 
+			<li id="user-menu" style="display: none;">
+>>>>>>> dc686871a475bdb0e54704820776b36af66ad061
 				<a href="#">
 					<i class="fa fa-user"></i>
-					User7374
+					<span id="uname">User7374</span>
 					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
 				</a>
 				<ul>
 					<li><a href="#">Dashboard</a></li>
-					<li><a href="index_off.html" class="logout">Logout</a></li>
+					<li><a href="index.html" id="logout-link" class="logout">Logout</a></li>
 				</ul>
 			</li>
 		</ul>
@@ -76,31 +82,7 @@
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
 
-	<!---<script>
-	let s = document.getElementById("signup");
-	let l = document.getElementById("login");
-	let u = document.getElementById("user");
 
-	if (get_cookie()) {
-		s.style["display"] = "inline";
-		l.style["display"] = "inline";
-		u.style["display"] = "inline";
-		alert('cookie dohvacen');
-	}
-
-	async function get_cookie(){
-		let url = '/api/sessions';
-		try {
-			let response = await fetch(url, {
-				method: 'GET'
-			});
-			response = await response.json();
-			return response;
-		} catch(error){
-			console.log('Error: ', error);
-		}
-	}
-	</script> -->
 
 	<script>
 async function get_posts() {
@@ -147,26 +129,60 @@ async function show_post(post) {
 
 window.onload = initialize_site;
 
+async function user_is_logged_in() {
+	let url = "/api/sessions/";
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
 async function initialize_site() {
 	await load_posts();
-	/*if (await user_is_logged_in()) {
+	let login_info = await user_is_logged_in();
+	if (login_info.status == 'success') {
 		//show logout link and tasks
-		logout_link = document.getElementById("logout_link");
-		logout_link.style.display = "initial";
-
-		tasks_div = document.getElementById("task-form");
-		tasks_div.style.display = "initial";
-		await load_tasks();
+		user_menu = document.getElementById("user-menu");
+		user_menu.style.display = "initial";
+		user_menu.querySelector("#uname").innerHTML = login_info.data.username;
+		//tasks_div = document.getElementById("task-form");
+		//tasks_div.style.display = "initial";
 	} else {
 		//show log in and register links
-		login_link = document.getElementById("login_link");
+		login_link = document.getElementById("login-link");
 		login_link.style.display = "initial";
 
-		register_link = document.getElementById("register_link");
+		register_link = document.getElementById("signup-link");
 		register_link.style.display = "initial";
 	}
-	*/
 }
+
+//setup log out link
+logout_link = document.getElementById("logout-link");
+logout_link.addEventListener("click", () => {
+	logout_user().then(() => {
+		location.reload();
+	})
+});
+
+async function logout_user() {
+	let url = "/api/sessions/";
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+		});
+		console.log('Logout response:', JSON.stringify(json));
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+
 	</script>
 	<!-- Custom Script-->
 	<script src="scripts.js"></script>
