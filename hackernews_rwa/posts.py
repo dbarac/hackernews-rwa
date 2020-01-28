@@ -88,7 +88,7 @@ class PostAPI(MethodView):
 			#comments = create_comment_threads(deque(comments))
 			return {
 				"status": "success",
-				"data": self.create_comment_threads(deque(comments))
+				"data": comments
 			}
 		else:
 			return {
