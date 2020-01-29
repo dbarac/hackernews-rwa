@@ -40,7 +40,7 @@ body{
 
 header{
 	background-color: #1d9c72;
-	height: 66px;
+	height: 60px;
 }
 
 header *{
@@ -64,12 +64,18 @@ header .logo-text span{
 header .menu-toggle{
 	display:none;
 }
+header a{
+	text-decoration: none;
+}
 
 header ul{
 	float:right;
 	margin: 0px;
 	padding: 0px;
 	list-style: none;					
+}
+header ul a{
+	height: 60px;				
 }
 
 header ul li{
@@ -79,7 +85,7 @@ header ul li{
 
 header ul li ul{ 
 	position: absolute;
-	top: 66px;
+	top: 60px;
 	right: 0px;
 	width: 180px;
 	display: none;
@@ -98,6 +104,7 @@ header ul li ul li a{
 	padding: 10px;
 	background: white;
 	color: #444;
+	height: 60px;
 }
 
 header ul li ul li a.logout{
@@ -116,15 +123,16 @@ header ul li a{
 }
 
 header ul li a:hover{
-	background: #006669;
+	background: #098058;
 	
 }
 
 /*	CONTENT______________________________________________________________________________*/
 	.content {
-		width: 80%;
+		width: 70%;
 		margin: 50px auto 50px;
-		border: 1px solid red;
+		border: 2px solid #5c5c5c;
+		background-color: #f7c1a3;
 	}
 	.content .counter-content{
 		width: 3%;
@@ -132,18 +140,10 @@ header ul li a:hover{
 		float: left;
 		font-size: 24px;
 		text-align: center;
-		border: 1px solid green;
 		min-width: 48px;
 	}
 	.content .main-content{
-		width: 77%;
 		float: left;
-		border: 1px solid blue;
-	}
-	.content .admin-content{
-		width: 20%;
-		float: left;
-		border: 1px solid pink;
 	}
 	.content .main-content .recent-post-title a{
 		text-decoration: none;
@@ -157,63 +157,22 @@ header ul li a:hover{
 		margin: 5px;
 		text-decoration: none;
 	}
-	.green:hover{
+	.toGreen:hover{
 	 color:#1d9c72;
 	}
-	
-
-
-/*MEDIA  REQUIRMENTS_________________________________*/
-
-@media only screen and (max-width: 750px) {
-	header{
-		position: relative;
+	.toRed:hover{
+	 color:red;
 	}
-	header ul{
-		width: 100%;
-		background-color: #0E94A0;
-		max-height: 0px;
-		overflow: hidden;
+	.toGreen{
+		color: #5c5c5c;
 	}
-	.showing{
-		max-height: 100em;
+	.toRed{
+		color: #5c5c5c;
 	}
 
-	header ul li{
-		width: 100%;
-	}
-	header ul li ul{
-		position: static;
-		display: block;
-		width: 100%;
-	}
-		header ul li ul li a{
-		padding: 10px;
-		background:  #0E94A0;
-		color: white;
-		padding-left: 50px;
-	}
 
-		header ul li ul li a:hover{
-			background: #006669;
-		}	
 
-		header ul li ul li a.logout{
-			color:red;
-	}
-		header .menu-toggle{
-		display: block;
-		position: absolute;
-		right: 20px;
-		top: 20px;
-		font-size: 1.9em;
-	}
-	header .logo {
-	margin-left: 2em;
-	}
-
-}
-/*_______*/
+/*____________login i singup nesto___________________________________________*/
 .btn{
 	padding: .5rem 1rem;
 	background: #1d9c72;
@@ -277,6 +236,60 @@ header ul li a:hover{
 
 .auth-content form p a{
 	text-decoration: underline;
+}
+
+	
+
+
+/*MEDIA  REQUIRMENTS_________________________________*/
+
+@media only screen and (max-width: 750px) {
+	header{
+		position: relative;
+	}
+	header ul{
+		width: 100%;
+		background-color: #0E94A0;
+		max-height: 0px;
+		overflow: hidden;
+	}
+	.showing{
+		max-height: 100em;
+	}
+
+	header ul li{
+		width: 100%;
+	}
+	header ul li ul{
+		position: static;
+		display: block;
+		width: 100%;
+	}
+		header ul li ul li a{
+		padding: 10px;
+		background:  #0E94A0;
+		color: white;
+		padding-left: 50px;
+	}
+
+		header ul li ul li a:hover{
+			background: #006669;
+		}	
+
+		header ul li ul li a.logout{
+			color:red;
+	}
+		header .menu-toggle{
+		display: block;
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		font-size: 1.9em;
+	}
+	header .logo {
+	margin-left: 2em;
+	}
+
 }
 
 /*-profile page----------------------------------------------*/
