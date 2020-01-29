@@ -283,12 +283,6 @@ async function initialize_site() {
 		//tasks_div = document.getElementById("task-form");
 		//tasks_div.style.display = "initial";
 		//setup log out link
-		logout_link = document.getElementById("logout-link");
-		logout_link.addEventListener("click", function (event) {
-			logout_user().then(() => {
-				
-			});
-		});
 		usrname = document.getElementById("usrname");
 		usrname.innerHTML = login_info.data.username;
 		
