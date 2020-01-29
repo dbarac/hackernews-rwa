@@ -66,7 +66,7 @@ class PostAPI(MethodView):
 			' LEFT OUTER JOIN'
 			' (select positive as user_vote_positive, user_id, post_id from post_vote'
 			' where user_id = %s) v'
-			' ON post.user_id = v.user_id AND post.id = v.post_id'
+			' ON post.id = v.post_id'
 			+ ranking_sql[sort_by] + ' LIMIT %s OFFSET %s',
 			(user_id, g.limit, g.offset)
 			)

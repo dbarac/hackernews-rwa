@@ -147,6 +147,13 @@ async function show_post(post) {
 	let upvote = $(templateContent.querySelector('.fa-chevron-up'));
 	let downvote = $(templateContent.querySelector('.fa-chevron-down'));
 
+	//boje strelica
+	if (post.user_vote_positive === 1) {
+		upvote.css('color', 'green');
+	} else if (post.user_vote_positive === 0) {
+		downvote.css('color', 'red');
+	}
+
 	upvote.click(function () {
 
 		const previousVote = upvote.attr('data-voted');
