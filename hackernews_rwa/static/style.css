@@ -41,6 +41,7 @@ body{
 header{
 	background-color: #1d9c72;
 	height: 60px;
+	margin-bottom: 50px;
 }
 
 header *{
@@ -130,17 +131,21 @@ header ul li a:hover{
 /*	CONTENT______________________________________________________________________________*/
 	.content {
 		width: 70%;
-		margin: 50px auto 50px;
-		border: 2px solid #5c5c5c;
+		margin: 5px auto 5px;
+		border: 1px solid #5c5c5c;
 		background-color: white;
+
+	}
+	.content h1{
+		font-size: 16px;
 	}
 	.content .counter-content{
 		width: 3%;
-		height: 80px;
+		height: 40px;
 		float: left;
-		font-size: 24px;
+		font-size: 16px;
 		text-align: center;
-		min-width: 48px;
+		min-width: 16px;
 	}
 	.content .main-content{
 		float: left;
@@ -155,6 +160,7 @@ header ul li a:hover{
 	}
 	.content .main-content .post-preview{
 		margin: 5px;
+		font-size: 12px;
 		text-decoration: none;
 	}
 	.toGreen:hover{
@@ -169,7 +175,8 @@ header ul li a:hover{
 	.toRed{
 		color: #5c5c5c;
 	}
-
+/*____________________post body __________________*/
+	.contentBody{}
 
 
 /*____________login i singup nesto___________________________________________*/
@@ -239,7 +246,7 @@ header ul li a:hover{
 }
 
 
-/* PROFILE CSS */
+/* PROFILE CSS______________________________ */
 
 /* Profile container */
 .profile-container {
