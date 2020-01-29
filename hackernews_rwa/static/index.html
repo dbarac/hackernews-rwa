@@ -19,7 +19,7 @@
 <body>
 	<header>
 		<div class="logo">
-			<h1 class="logo-text"><span>Na</span>Slov</h1>
+			<h1 class="logo-text"><a href="index.html"><span>Na</span>Slov</a></h1>
 		</div>
 		<i class="fa fa-bars menu-toggle"></i>
 		<ul class="nav">
@@ -36,8 +36,10 @@
 					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
 				</a>
 				<ul>
-					<li><a href="#">Dashboard</a></li>
-					<li><a href="index.html" id="logout-link" class="logout">Logout</a></li>
+
+					<li><a href="dashboard.html">Dashboard</a></li>
+					<li><a id="logout-link" href="index.html" class="logout">Logout</a></li>
+
 				</ul>
 			</li>
 		</ul>
@@ -48,25 +50,26 @@
 	<div class="content clearfix">
 
 			<div class="counter-content">
-				<p>1. <i class="fa fa-chevron-up fa-lg green" aria-hidden="true"></i></p>
+				<i class="fa fa-chevron-up fa-lg toGreen" aria-hidden="true"></i>
+				1.
+				<i class="fa fa-chevron-down fa-lg toRed" aria-hidden="true"></i>
 			</div>	
 
 			<!--Main Content -->
 			<div class="main-content">
-				<h1 class="recent-post-title"><a href="single.html">Različit tekst tekst različit. Različit tekst tekst različit. </a></h1>
+				<h1 class="recent-post-title"><a href="single.html"></a></h1>
 				<div class="post">
-					<div class="post-preview">
-						<i class="votes">/NumberOfUpvotes\</i>
+					<div class="post-preview"> <!-- ovdje classa ostaje preview zobg css-a -->
+						<i class="displayVotes"></i>
 						&nbsp;
-						<a><i class="far fa-user">User7374</i></a>
+						<i class="far fa-user fa-spin"></i>
+						<a class="displayUserID">hehe</a> <!--zaminijti id sa name -->
 						&nbsp;
-						<i class="far calendar">Jan 24, 2020</i>
-						<p class="preview-text"></p>
+						<i class="far calendar"></i>
+						<i class="displayDate">
 					</div>
 
 				</div>
-
-
 
 			</div>
 
@@ -112,13 +115,97 @@ function delete_tasks() {
 }
 async function show_post(post) {
 	let post_template = document.getElementById("post-template");
-	let templateContent = post_template.content.cloneNode(true);
+	let templateContent = post_template.content.cloneNode(true); //napravi kopiju predloska
 	let h1 = templateContent.querySelector("h1");
 	h1.innerHTML = post.title;
-	let votes = templateContent.querySelector(".votes");
+
+	let votes = templateContent.querySelector(".displayVotes");
 	votes.innerHTML = post.votes;
+
+	let userID = templateContent.querySelector(".displayUserID");
+	userID.innerHTML = post.user_id; //zamijeniti sa username
+
+	let date = templateContent.querySelector(".displayDate");
+	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
+
+	/* ________________________upvote & downvote__________________________*/
+
+	let upvote = $(templateContent.querySelector('.fa-chevron-up'));
+	let downvote = $(templateContent.querySelector('.fa-chevron-down'));
+
+	upvote.click(function () {
+
+		const previousVote = upvote.attr('data-voted');
+
+		if (previousVote === undefined) {
+			fetch(`/api/posts/${post.id}/votes`, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ direction: 1 })
+			})
+				.then(response => response.json(), (err) => console.error(err))
+				.then(json => {
+					if (json.status === "success") {
+						upvote.attr('data-voted', '');
+						upvote.css('color', 'green');
+						downvote.attr('data-voted', null);
+						downvote.css('color', '#000000');
+					}
+				})
+		} else {
+			deleteVote(upvote, downvote, post.id);
+		}
+
+	});
+
+
+	downvote.click(function () {
+
+		const previousVote = downvote.attr('data-voted');
+
+		if (previousVote === undefined) {
+			fetch(`/api/posts/${post.id}/votes`, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ direction: -1 })
+			})
+				.then(response => response.json())
+				.then(json => {
+					if (json.status === "success") {
+						upvote.attr('data-voted', null);
+						upvote.css('color', '#000000');
+						downvote.attr('data-voted', '');
+						downvote.css('color', 'red');
+					}
+				})
+		} else {
+			deleteVote(upvote, downvote, post.id);
+		}
+
+	});
+
+
+	function deleteVote(upvote, downvote, id) {
+		fetch(`/api/posts/${id}/votes`, {
+			method: "DELETE"
+		})
+			.then(response => response.json())
+			.then(json => {
+				if (json.status === "success") {
+					upvote.attr('data-voted', null);
+					upvote.css('color', '#000000');
+					downvote.attr('data-voted', null);
+					downvote.css('color', '#000000');
+				}
+			});
+	}
 	//let p = templateContent.querySelector("p");
     //p.id = task.id;
+
 	let posts_container = document.getElementById("b");
 	posts_container.appendChild(templateContent);
 }
