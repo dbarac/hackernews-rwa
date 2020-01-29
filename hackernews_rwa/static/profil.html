@@ -47,6 +47,7 @@
 </header>
 
 	<!-- profile sidebar -->
+<div class="profile-post-container">
 	<div class="profile-container">
     <div class="row profile">
 		<div class="col-md-3">
@@ -65,15 +66,17 @@
 				<div class="profile-usermenu">
 					<div class="nav">
 						<div class="karma">
-							Karma
+							Karma:
+							<i class="fas fa-meteor"></i>
 						</div>
 						<div class="created">
-							Profile created
+							Profile created:
+							<i class="fas fa-dragon"></i>
 						</div>
 					</div>
 					<div>
-						<i class="fas fa-meteor"></i>
-						<i class="fas fa-dragon"></i>
+						
+						
 					</div>
 				</div>
 			</div>
@@ -82,7 +85,7 @@
 	</div>
 
 	<!-- user posts -->
-
+	<div class="profile-post-template">
 	<template id="post-template">
 	<div class="content-container">
 	<div class="content clearfix">
@@ -94,11 +97,11 @@
 					<div class="post-preview"> <!-- ovdje classa ostaje preview zobg css-a -->
 						<i class="displayVotes"></i>
 						&nbsp;
-						<i class="far fa-user fa-spin"></i>
-						<a class="displayUserID">hehe</a> <!--zaminijti id sa name -->
+						<i class="far fa-user"></i>
+						<a class="displayUserID"></a> <!--zaminijti id sa name -->
 						&nbsp;
 						<i class="far calendar"></i>
-						<i class="displayDate">
+						<i class="displayDate"></i>
 					</div>
 
 				</div>
@@ -108,6 +111,8 @@
 		</div>
 	</div>
 </template>
+</div>
+</div>
 
 <div id="b"></div>
 
