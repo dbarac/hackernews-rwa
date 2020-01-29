@@ -19,36 +19,321 @@
 <body>
 	<header>
 		<div class="logo">
-			<h1 class="logo-text"><span>Na</span>Slov</h1>
+			<h1 class="logo-text"><a href="index.html"><span>Na</span>Slov</a></h1>
 		</div>
 		<i class="fa fa-bars menu-toggle"></i>
 		<ul class="nav">
-			<li><a href="index.html">Home</a></li>
+			<li><a href="index.html" >Home</a></li>
 			<li><a href="#">About</a></li>
-			<li><a href="#">Services</a></li>
-			<!--<li><a href="#">Sing Up</a></li>
-			<li><a href="#">Login</a></li> -->
-			<li>
+
+			<li id="signup-link" style="display: none;"><a href="signup.html">Sing Up</a></li>
+			<li id="login-link" style="display: none;"><a href="login.html">Login</a></li> 
+			<li id="user-menu" style="display: none;">
+
 				<a href="#">
 					<i class="fa fa-user"></i>
-					User7374
+					<span id="uname"></span>
 					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
 				</a>
 				<ul>
-					<li><a href="#">Dashboard</a></li>
-					<li><a href="index_off.html" class="logout">Logout</a></li>
+
+					<li><a href="profil.html">Dashboard</a></li>
+					<li><a id="logout-link" href="index.html" class="logout">Logout</a>
+					</li>
+
 				</ul>
 			</li>
 		</ul>
-	</header>
+</header>
 
-	<!-- Content -->
+	<!-- profile sidebar -->
+	<div class="profile-container">
+    <div class="row profile">
+		<div class="col-md-3">
+			<div class="profile-sidebar">
+				
+				<div class="profile-userpic">
+					<i class="fas fa-user-astronaut"></i>
+				</div>
+				
+				<div class="profile-usertitle">
+					<div class="profile-usertitle-name">
+						<span id="usrname">User7374</span>
+					</div>
+				</div>
+			
+				<div class="profile-usermenu">
+					<ul class="nav">
+						<li class="active">
+							<a href="#">
+							<i class="glyphicon glyphicon-home"></i>
+							Overview </a>
+						</li>
+						<li>
+							<a href="#">
+							<i class="glyphicon glyphicon-user"></i>
+							Account Settings </a>
+						</li>
+						<li>
+							<a href="#" target="_blank">
+							<i class="glyphicon glyphicon-ok"></i>
+							Tasks </a>
+						</li>
+						<li>
+							<a href="#">
+							<i class="glyphicon glyphicon-flag"></i>
+							Help </a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9">
+            <div class="profile-content">
+			   Some user related content goes here...
+            </div>
+		</div>
+	</div>
+	</div>
+
+	<!-- user posts -->
+
+	<template id="post-template">
+	<div class="content clearfix">
+
+			<div class="counter-content">
+				<i class="fa fa-chevron-up fa-lg toGreen" aria-hidden="true"></i>
+				1.
+				<i class="fa fa-chevron-down fa-lg toRed" aria-hidden="true"></i>
+			</div>	
+
+			<!--Main Content -->
+			<div class="main-content">
+				<a href="single.html" style="text-decoration: none;"><h1 class="recent-post-title"></h1></a>
+				<div class="post">
+					<div class="post-preview"> <!-- ovdje classa ostaje preview zobg css-a -->
+						<i class="displayVotes"></i>
+						&nbsp;
+						<i class="far fa-user fa-spin"></i>
+						<a class="displayUserID">hehe</a> <!--zaminijti id sa name -->
+						&nbsp;
+						<i class="far calendar"></i>
+						<i class="displayDate">
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+</template>
+
+<div id="b"></div>
+
 	
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
 
 	<!-- Custom Script-->
 	<script src="scripts.js"></script>
-	<script src="header.js"></script>
+
+<script>
+	async function get_posts() {
+	let url = "/api/posts";
+	try {
+		let response = await fetch(url, {
+			method: 'GET'
+		});
+		//parse JSON response into native JavaScript object
+		posts = await response.json();
+		return posts.data;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+var posts = 0;
+
+async function load_posts() {
+	//delete currently shown tasks and load tasks again from api
+	//delete_tasks();
+	let posts = await get_posts();
+	posts.forEach(show_post);
+}
+
+function delete_tasks() {
+	let tasks_container = document.getElementById("task-container");
+	while (tasks_container.firstChild) {
+    	tasks_container.removeChild(tasks_container.firstChild);
+	}
+}
+async function show_post(post) {
+	let post_template = document.getElementById("post-template");
+	let templateContent = post_template.content.cloneNode(true); //napravi kopiju predloska
+	let h1 = templateContent.querySelector("h1");
+	h1.innerHTML = post.title;
+
+	let votes = templateContent.querySelector(".displayVotes");
+	votes.innerHTML = post.votes;
+
+	let userID = templateContent.querySelector(".displayUserID");
+	userID.innerHTML = post.user_id; //zamijeniti sa username
+
+	let date = templateContent.querySelector(".displayDate");
+	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
+
+	// ________________________upvote & downvote__________________________
+
+	let upvote = $(templateContent.querySelector('.fa-chevron-up'));
+	let downvote = $(templateContent.querySelector('.fa-chevron-down'));
+
+	upvote.click(function () {
+
+		const previousVote = upvote.attr('data-voted');
+
+		if (previousVote === undefined) {
+			fetch(`/api/posts/${post.id}/votes`, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ direction: 1 })
+			})
+				.then(response => response.json(), (err) => console.error(err))
+				.then(json => {
+					if (json.status === "success") {
+						upvote.attr('data-voted', '');
+						upvote.css('color', 'green');
+						downvote.attr('data-voted', null);
+						downvote.css('color', '#000000');
+					}
+				})
+		} else {
+			deleteVote(upvote, downvote, post.id);
+		}
+
+	});
+
+
+	downvote.click(function () {
+
+		const previousVote = downvote.attr('data-voted');
+
+		if (previousVote === undefined) {
+			fetch(`/api/posts/${post.id}/votes`, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ direction: -1 })
+			})
+				.then(response => response.json())
+				.then(json => {
+					if (json.status === "success") {
+						upvote.attr('data-voted', null);
+						upvote.css('color', '#000000');
+						downvote.attr('data-voted', '');
+						downvote.css('color', 'red');
+					}
+				})
+		} else {
+			deleteVote(upvote, downvote, post.id);
+		}
+
+	});
+
+
+	function deleteVote(upvote, downvote, id) {
+		fetch(`/api/posts/${id}/votes`, {
+			method: "DELETE"
+		})
+			.then(response => response.json())
+			.then(json => {
+				if (json.status === "success") {
+					upvote.attr('data-voted', null);
+					upvote.css('color', '#000000');
+					downvote.attr('data-voted', null);
+					downvote.css('color', '#000000');
+				}
+			});
+	}
+	//let p = templateContent.querySelector("p");
+    //p.id = task.id;
+
+	let posts_container = document.getElementById("b");
+	posts_container.appendChild(templateContent);
+}
+
+
+// inicijalizacija stranice, headera i logouta
+
+window.onload = initialize_site;
+
+async function user_is_logged_in() {
+	let url = "/api/sessions/";
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+async function initialize_site() {
+	//await load_posts();
+	let login_info = await user_is_logged_in();
+	if (login_info.status == 'success') {
+		//show logout link and tasks
+		alert(JSON.stringify(login_info.data));
+		user_menu = document.getElementById("user-menu");
+		user_menu.style.display = "initial";
+		user_menu.querySelector("#uname").innerHTML = login_info.data.username;
+		//tasks_div = document.getElementById("task-form");
+		//tasks_div.style.display = "initial";
+		//setup log out link
+		logout_link = document.getElementById("logout-link");
+		logout_link.addEventListener("click", function (event) {
+			logout_user().then(() => {
+				
+			});
+		});
+		usrname = document.getElementById("usrname");
+		usrname.innerHTML = login_info.data.username;
+		
+	} else {
+		//show log in and register links
+		login_link = document.getElementById("login-link");
+		login_link.style.display = "initial";
+
+		register_link = document.getElementById("signup-link");
+		register_link.style.display = "initial";
+	}
+}
+
+//setup log out link
+logout_link = document.getElementById("logout-link");
+logout_link.addEventListener("click", function (event) {
+	event.preventDefault(); 
+	logout_user().then(() => {
+		location.reload();
+	});
+});
+
+async function logout_user() {
+	let url = "/api/sessions/";
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+		});
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+	</script>
+
 </body>
 </html>
