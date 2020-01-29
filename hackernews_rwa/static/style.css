@@ -41,6 +41,7 @@ body{
 header{
 	background-color: #1d9c72;
 	height: 60px;
+	margin-bottom: 50px;
 }
 
 header *{
@@ -130,17 +131,24 @@ header ul li a:hover{
 /*	CONTENT______________________________________________________________________________*/
 	.content {
 		width: 70%;
-		margin: 50px auto 50px;
-		border: 2px solid #5c5c5c;
+		margin: 5px auto 5px;
+		border: 1px solid #5c5c5c;
 		background-color: white;
+
+	}
+	.content h1{
+		font-size: 16px;
+	}
+	.content-container{
+		padding-left: 270px;
 	}
 	.content .counter-content{
 		width: 3%;
-		height: 80px;
+		height: 40px;
 		float: left;
-		font-size: 24px;
+		font-size: 16px;
 		text-align: center;
-		min-width: 48px;
+		min-width: 16px;
 	}
 	.content .main-content{
 		float: left;
@@ -155,6 +163,7 @@ header ul li a:hover{
 	}
 	.content .main-content .post-preview{
 		margin: 5px;
+		font-size: 12px;
 		text-decoration: none;
 	}
 	.toGreen:hover{
@@ -169,7 +178,8 @@ header ul li a:hover{
 	.toRed{
 		color: #5c5c5c;
 	}
-
+/*____________________post body __________________*/
+	.contentBody{}
 
 
 /*____________login i singup nesto___________________________________________*/
@@ -239,15 +249,16 @@ header ul li a:hover{
 }
 
 
-/* PROFILE CSS */
+/* PROFILE CSS______________________________ */
 
 /* Profile container */
 .profile-container {
   margin: 20px 0;
-  height: 50px;
+  height: 400px;
   width: 300px;
   display: flex;
   justify-content: center;
+  padding-left: 30px;
 }
 
 /* Profile sidebar */
@@ -257,7 +268,7 @@ header ul li a:hover{
 }
 
 .profile-userpic{
-	padding-left: 116px;
+	padding-left: 100px;
 }
 
 .fa-user-astronaut{
@@ -280,39 +291,22 @@ header ul li a:hover{
   margin-top: 30px;
 }
 
-.profile-usermenu ul li {
-  border-bottom: 1px solid #f0f4f7;
+.nav{
+	display: inline-flex;
+	flex-direction: row;
 }
 
-.profile-usermenu ul li:last-child {
-  border-bottom: none;
+.karma{
+	align-self: flex-start;
+	padding-left: 15%;
+	padding-right: 35px;
+	font-family: 'Lora', 'serif';
 }
 
-.profile-usermenu ul li a {
-  color: #93a3b5;
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.profile-usermenu ul li a i {
-  margin-right: 8px;
-  font-size: 14px;
-}
-
-.profile-usermenu ul li a:hover {
-  background-color: #fafcfd;
-  color: #5b9bd1;
-}
-
-.profile-usermenu ul li.active {
-  border-bottom: none;
-}
-
-.profile-usermenu ul li.active a {
-  color: #5b9bd1;
-  background-color: #f6f9fb;
-  border-left: 2px solid #5b9bd1;
-  margin-left: -2px;
+.created{
+	align-self: flex-end;
+	padding-right: 5%;
+	font-family: 'Lora', 'serif';
 }
 
 /* Profile Content */
@@ -322,7 +316,13 @@ header ul li a:hover{
   min-height: 460px;
 }
 
-	
+.fa-meteor{
+	color: red;
+}
+
+.fa-dragon{
+	color: red;
+}
 
 
 /*MEDIA  REQUIRMENTS_________________________________*/

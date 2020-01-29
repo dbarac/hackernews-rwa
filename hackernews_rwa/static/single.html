@@ -17,85 +17,26 @@
 	<title>NaSlov</title>
 </head>
 <body>
-	<header>
-		<div class="logo">
-			<h1 class="logo-text"><a href="index.html"><span>Na</span>Slov</a></h1>
-		</div>
-		<i class="fa fa-bars menu-toggle"></i>
-		<ul class="nav">
-			<li><a href="index.html" >Home</a></li>
-			<li><a href="#">About</a></li>
+	<div id="header"></div>
 
-			<li id="signup-link" style="display: none;"><a href="signup.html">Sing Up</a></li>
-			<li id="login-link" style="display: none;"><a href="login.html">Login</a></li> 
-			<li id="user-menu" style="display: none;">
-
-				<a href="#">
-					<i class="fa fa-user"></i>
-					<span id="uname"></span>
-					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
-				</a>
-				<ul>
-
-					<li><a href="profil.html">Dashboard</a></li>
-					<li><a id="logout-link" href="index.html" class="logout">Logout</a>
-					</li>
-
-				</ul>
-			</li>
-		</ul>
-</header>
-
-	<!-- profile sidebar -->
-	<div class="profile-container">
-    <div class="row profile">
-		<div class="col-md-3">
-			<div class="profile-sidebar">
-				
-				<div class="profile-userpic">
-					<i class="fas fa-user-astronaut"></i>
-				</div>
-				
-				<div class="profile-usertitle">
-					<div class="profile-usertitle-name">
-						<span id="usrname">User7374</span>
-					</div>
-				</div>
-			
-				<div class="profile-usermenu">
-					<div class="nav">
-						<div class="karma">
-							Karma
-						</div>
-						<div class="created">
-							Profile created
-						</div>
-					</div>
-					<div>
-						<i class="fas fa-meteor"></i>
-						<i class="fas fa-dragon"></i>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	</div>
-
-	<!-- user posts -->
-
-	<template id="post-template">
-	<div class="content-container">
+<!-- Task template -->
+<template id="post-template">
 	<div class="content clearfix">
+
+			<div class="counter-content">
+				<i class="fa fa-chevron-up fa-lg toGreen" aria-hidden="true"></i>
+				<i class="fa fa-chevron-down fa-lg toRed" aria-hidden="true"></i>
+			</div>	
 
 			<!--Main Content -->
 			<div class="main-content">
-				<a href="single.html" style="text-decoration: none;"><h1 class="recent-post-title"></h1></a>
+				<a href="single.html" style="text-decoration: none; color:black"><h1 class="recent-post-title"></h1></a>
 				<div class="post">
 					<div class="post-preview"> <!-- ovdje classa ostaje preview zobg css-a -->
 						<i class="displayVotes"></i>
 						&nbsp;
-						<i class="far fa-user fa-spin"></i>
-						<a class="displayUserID">hehe</a> <!--zaminijti id sa name -->
+						<i class="far fa-user"></i>
+						<a class="displayUserID"></a> <!--zaminijti id sa name -->
 						&nbsp;
 						<i class="far calendar"></i>
 						<i class="displayDate">
@@ -106,21 +47,19 @@
 			</div>
 
 		</div>
-	</div>
 </template>
 
-<div id="b"></div>
+	<div id="b"></div>
 
-	
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
-
-	<!-- Custom Script-->
 	<script src="scripts.js"></script>
 
-<script>
-	async function get_posts() {
-	let url = "/api/posts";
+
+
+	<script>
+async function get_posts() {
+	let url = "/api/posts/";
 	try {
 		let response = await fetch(url, {
 			method: 'GET'
@@ -133,21 +72,22 @@
 	}
 }
 
+
 var posts = 0;
 
-async function compare(post) {
-	let login_info = await user_is_logged_in();
-	if(login_info.data.id === post.user_id){
-		show_post(post);
-	}
-}
+const queryString = window.location.search;
+console.log(queryString);
+const urlParams = new URLSearchParams(queryString);
+const wantedPost = urlParams.get('id');
+console.log(wantedPost);
+
+
 
 async function load_posts() {
 	//delete currently shown tasks and load tasks again from api
 	//delete_tasks();
 	let posts = await get_posts();
-	posts.forEach(compare);
-//	posts.forEach(show_post);
+	posts.forEach(show_post);
 }
 
 function delete_tasks() {
@@ -171,7 +111,15 @@ async function show_post(post) {
 	let date = templateContent.querySelector(".displayDate");
 	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
 
-	// ________________________upvote & downvote__________________________
+	if(post.url == ""){
+		link = templateContent.querySelector("a");
+		link.href = "single.html?id=" + post.id;
+	}else{
+		link = templateContent.querySelector("a");
+		link.href = post.url;
+	}
+	
+	/* ________________________upvote & downvote__________________________*/
 
 	let upvote = $(templateContent.querySelector('.fa-chevron-up'));
 	let downvote = $(templateContent.querySelector('.fa-chevron-down'));
@@ -253,9 +201,6 @@ async function show_post(post) {
 	posts_container.appendChild(templateContent);
 }
 
-
-// inicijalizacija stranice, headera i logouta
-
 window.onload = initialize_site;
 
 async function user_is_logged_in() {
@@ -276,16 +221,11 @@ async function initialize_site() {
 	let login_info = await user_is_logged_in();
 	if (login_info.status == 'success') {
 		//show logout link and tasks
-		//alert(JSON.stringify(login_info.data));
 		user_menu = document.getElementById("user-menu");
 		user_menu.style.display = "initial";
 		user_menu.querySelector("#uname").innerHTML = login_info.data.username;
 		//tasks_div = document.getElementById("task-form");
 		//tasks_div.style.display = "initial";
-		//setup log out link
-		usrname = document.getElementById("usrname");
-		usrname.innerHTML = login_info.data.username;
-		
 	} else {
 		//show log in and register links
 		login_link = document.getElementById("login-link");
@@ -301,7 +241,7 @@ logout_link = document.getElementById("logout-link");
 logout_link.addEventListener("click", function (event) {
 	event.preventDefault(); 
 	logout_user().then(() => {
-		window.location.replace("index.html");
+		location.reload();
 	});
 });
 
@@ -316,7 +256,9 @@ async function logout_user() {
 	}
 }
 
-	</script>
 
+	</script>
+	<!-- Custom Script-->
+	
 </body>
 </html>
