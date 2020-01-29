@@ -55,12 +55,20 @@ class PostAPI(MethodView):
 		if sort_by not in ('top', 'rising', 'new'):
 			sort_by = 'rising'
 		
+		user_id = None
+		if g.user:
+			user_id = g.user['id']
+
 		errors = {}
 		db_cursor.execute(
 			'SELECT * FROM post INNER JOIN'
 			' (SELECT id, username FROM user) u ON post.user_id = u.id'
+			' LEFT OUTER JOIN'
+			' (select positive as user_vote_positive, user_id, post_id from post_vote'
+			' where user_id = %s) v'
+			' ON post.user_id = v.user_id AND post.id = v.post_id'
 			+ ranking_sql[sort_by] + ' LIMIT %s OFFSET %s',
-			(g.limit, g.offset)
+			(user_id, g.limit, g.offset)
 			)
 		posts = db_cursor.fetchall()
 		if not errors:

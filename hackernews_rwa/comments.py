@@ -30,16 +30,20 @@ class CommentAPI(MethodView):
 
 
 	def post(self, id):
-		if request.path.endswith('/upvotes'):
-			return self.create_vote(id, positive=True) 
-		elif request.path.endswith('/downvotes'):
-			return self.create_vote(id, positive=False)
+		if request.path.endswith('/votes'):
+			return self.create_vote(id) 
 
 
 	@login_required
-	def create_vote(self, comment_id, positive):
+	def create_vote(self, comment_id):
 		db = get_db()
 		db_cursor = db.cursor()
+		request_data = request.get_json()
+
+		positive = True
+		direction = request_data.get('direction', None)
+		if direction and int(direction) == -1:
+			positive = False
 
 		errors = {}
 		db_cursor.execute(
@@ -78,10 +82,8 @@ class CommentAPI(MethodView):
 
 
 	def delete(self, id):
-		if request.path.endswith('/upvotes'):
+		if request.path.endswith('/votes'):
 			return self.delete_vote(id) 
-		elif request.path.endswith('/downvotes'):
-			return self.delete_vote(id)
 		else:
 			return self.delete_comment(id)
 
@@ -182,5 +184,4 @@ class CommentAPI(MethodView):
 
 comment_view = CommentAPI.as_view('comment_api')
 bp.add_url_rule('/<int:id>', view_func=comment_view, methods=['GET', 'DELETE', 'PATCH'])
-bp.add_url_rule('<int:id>/upvotes', view_func=comment_view, methods=['POST', 'DELETE'])
-bp.add_url_rule('<int:id>/downvotes', view_func=comment_view, methods=['POST', 'DELETE'])
+bp.add_url_rule('<int:id>/votes', view_func=comment_view, methods=['POST', 'DELETE'])

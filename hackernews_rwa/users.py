@@ -18,6 +18,8 @@ class UserAPI(MethodView):
 				return self.get_posts_by_user(user_id)		
 			elif request.path.endswith('/comments'):
 				return self.get_comments_by_user(user_id)
+			elif request.path.endswith('/scores'):
+				return self.get_user_scores(user_id)
 	
 
 	def get_posts_by_user(self, user_id):
@@ -68,6 +70,46 @@ class UserAPI(MethodView):
 			}
 
 
+	def get_user_scores(self, user_id):
+		db = get_db()
+		db_cursor = db.cursor()
+
+		errors = {}
+		db_cursor.execute('SELECT * FROM user WHERE id = %s', (user_id))
+		user = db_cursor.fetchone()
+		if not user:
+			errors['user_id'] = 'User with given id does not exist'
+
+		if not errors:
+			db_cursor.execute(
+			'SELECT SUM(votes) as score FROM post WHERE user_id = %s', (user_id)
+			)
+			posts_score = db_cursor.fetchone()['score']
+			if not posts_score:
+				posts_score = 0
+			db_cursor.execute(
+				'SELECT SUM(votes) as score FROM comment WHERE user_id = %s', (user_id)
+			)
+			comment_score = db_cursor.fetchone()['score']
+			if not comment_score:
+				comment_score = 0
+
+			scores = {
+				"posts_score": int(posts_score),
+				"comment_score": int(comment_score)
+			}
+			return {
+				"status": "success",
+				"data": scores
+			}
+		else:
+			return {
+				"status": "fail",
+				"data": errors
+			}
+
+
+
 	def post(self):
 		#create new user
 		request_data = request.get_json()
@@ -89,6 +131,15 @@ class UserAPI(MethodView):
 			errors['username'] = 'User {} is already registered.'.format(username)
 		if not password:
 			errors['password'] = 'Password is required'
+		if email is not None:
+			if len(email) > 0:
+				db_cursor.execute(
+					'SELECT email FROM user WHERE email = %s', (email,)
+				)
+				if db_cursor.fetchone():
+					errors['email'] = 'email is already used by another user'
+			else:
+				email = None #set to null in db
 
 		if not errors:
 			db_cursor.execute(
@@ -136,3 +187,4 @@ bp.add_url_rule('/', view_func=user_view, methods=['POST'])
 bp.add_url_rule('/<int:user_id>', view_func=user_view, methods=['GET', 'DELETE'])
 bp.add_url_rule('/<int:user_id>/posts', view_func=user_view, methods=['GET'])
 bp.add_url_rule('/<int:user_id>/comments', view_func=user_view, methods=['GET'])
+bp.add_url_rule('/<int:user_id>/scores', view_func=user_view, methods=['GET'])
