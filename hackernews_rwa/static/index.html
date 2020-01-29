@@ -144,6 +144,13 @@ async function initialize_site() {
 		user_menu.querySelector("#uname").innerHTML = login_info.data.username;
 		//tasks_div = document.getElementById("task-form");
 		//tasks_div.style.display = "initial";
+		//setup log out link
+		logout_link = document.getElementById("logout-link");
+		logout_link.addEventListener("click", function (event) {
+			logout_user().then(() => {
+				
+			});
+		});
 	} else {
 		//show log in and register links
 		login_link = document.getElementById("login-link");
@@ -156,10 +163,11 @@ async function initialize_site() {
 
 //setup log out link
 logout_link = document.getElementById("logout-link");
-logout_link.addEventListener("click", () => {
+logout_link.addEventListener("click", function (event) {
+	event.preventDefault(); 
 	logout_user().then(() => {
 		location.reload();
-	})
+	});
 });
 
 async function logout_user() {
@@ -168,7 +176,6 @@ async function logout_user() {
 		const response = await fetch(url, {
 			method: 'DELETE',
 		});
-		console.log('Logout response:', JSON.stringify(json));
 	} catch (error) {
 		console.log('Error: ', error);
 	}
