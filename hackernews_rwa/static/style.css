@@ -134,6 +134,9 @@ header ul li a:hover{
 		border: 2px solid #5c5c5c;
 		background-color: white;
 	}
+	.content-container{
+		padding-left: 270px;
+	}
 	.content .counter-content{
 		width: 3%;
 		height: 80px;
@@ -244,10 +247,11 @@ header ul li a:hover{
 /* Profile container */
 .profile-container {
   margin: 20px 0;
-  height: 50px;
+  height: 400px;
   width: 300px;
   display: flex;
   justify-content: center;
+  padding-left: 30px;
 }
 
 /* Profile sidebar */
@@ -257,7 +261,7 @@ header ul li a:hover{
 }
 
 .profile-userpic{
-	padding-left: 116px;
+	padding-left: 100px;
 }
 
 .fa-user-astronaut{
@@ -280,39 +284,22 @@ header ul li a:hover{
   margin-top: 30px;
 }
 
-.profile-usermenu ul li {
-  border-bottom: 1px solid #f0f4f7;
+.nav{
+	display: inline-flex;
+	flex-direction: row;
 }
 
-.profile-usermenu ul li:last-child {
-  border-bottom: none;
+.karma{
+	align-self: flex-start;
+	padding-left: 15%;
+	padding-right: 35px;
+	font-family: 'Lora', 'serif';
 }
 
-.profile-usermenu ul li a {
-  color: #93a3b5;
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.profile-usermenu ul li a i {
-  margin-right: 8px;
-  font-size: 14px;
-}
-
-.profile-usermenu ul li a:hover {
-  background-color: #fafcfd;
-  color: #5b9bd1;
-}
-
-.profile-usermenu ul li.active {
-  border-bottom: none;
-}
-
-.profile-usermenu ul li.active a {
-  color: #5b9bd1;
-  background-color: #f6f9fb;
-  border-left: 2px solid #5b9bd1;
-  margin-left: -2px;
+.created{
+	align-self: flex-end;
+	padding-right: 5%;
+	font-family: 'Lora', 'serif';
 }
 
 /* Profile Content */
@@ -322,7 +309,13 @@ header ul li a:hover{
   min-height: 460px;
 }
 
-	
+.fa-meteor{
+	color: red;
+}
+
+.fa-dragon{
+	color: red;
+}
 
 
 /*MEDIA  REQUIRMENTS_________________________________*/
