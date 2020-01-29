@@ -104,6 +104,9 @@ async function show_post(post) {
 	let date = templateContent.querySelector(".displayDate");
 	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
 
+
+	link = templateContent.querySelector("a");
+	link.href = "single.html?id=" + post.id;
 	/* ________________________upvote & downvote__________________________*/
 
 	let upvote = $(templateContent.querySelector('.fa-chevron-up'));
@@ -211,13 +214,6 @@ async function initialize_site() {
 		user_menu.querySelector("#uname").innerHTML = login_info.data.username;
 		//tasks_div = document.getElementById("task-form");
 		//tasks_div.style.display = "initial";
-		//setup log out link
-		logout_link = document.getElementById("logout-link");
-		logout_link.addEventListener("click", function (event) {
-			logout_user().then(() => {
-				
-			});
-		});
 	} else {
 		//show log in and register links
 		login_link = document.getElementById("login-link");
