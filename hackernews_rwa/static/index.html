@@ -116,6 +116,8 @@
 
 	<script>
 
+/* SORT BY LATEST __________________________*/
+
 async function get_latest() {
 	let url = "/api/posts?sort_by=new&page_size=1000";
   	 		
@@ -148,6 +150,78 @@ if (lat) {
 	    load_latest();
   	});
 }
+
+
+/* SORT BY TOP ________________________ */
+
+async function get_top() {
+	let url = "/api/posts?sort_by=top&page_size=1000";
+  	 		
+	try {
+   		let response = await fetch(url, {
+   			method: 'GET'
+	   	});
+   		response = await response.json();
+    	console.log('Login response:', JSON.stringify(response));
+    	return response.data;
+  	} catch (error) {
+    	console.log('Error: ', error);
+  	}
+}
+
+async function load_top() {
+	let posts = await get_top();
+	delete_posts();
+	posts.forEach(show_post);
+}
+
+
+t = document.getElementById("top");
+if (t) {
+  	t.addEventListener("click", function (event) {
+    	event.preventDefault(); //prevent form submitting to host
+    	//delete_posts();
+    	let hide = document.getElementById("load-more");
+    	hide.style.display = 'none';
+	    load_top();
+  	});
+}
+
+/* SORT BY RISING ____________________*/
+
+async function get_rising() {
+	let url = "/api/posts?sort_by=rising&page_size=1000";
+  	 		
+	try {
+   		let response = await fetch(url, {
+   			method: 'GET'
+	   	});
+   		response = await response.json();
+    	console.log('Login response:', JSON.stringify(response));
+    	return response.data;
+  	} catch (error) {
+    	console.log('Error: ', error);
+  	}
+}
+
+async function load_rising() {
+	let posts = await get_rising();
+	delete_posts();
+	posts.forEach(show_post);
+}
+
+
+rise = document.getElementById("rising");
+if (rise) {
+  	rise.addEventListener("click", function (event) {
+    	event.preventDefault(); //prevent form submitting to host
+    	//delete_posts();
+    	let hide = document.getElementById("load-more");
+    	hide.style.display = 'none';
+	    load_rising();
+  	});
+}
+
 
 /* LOAD MORE ______________________*/
 
