@@ -319,36 +319,28 @@ header ul li a:hover{
 	color: #02b375;
 }
 
-/* PAGINATION CSS ____________________________ */
+/* LOAD MORE CSS ____________________________ */
 
-.pagination {
-  display: inline-block;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  margin-top: -50px;
-  margin-left: -170px;
-  padding-top: 100px;
+.loadmore{
+	padding-top: 40px;
+	padding-bottom: 50px;
 }
 
-.pagination a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
-}
+.load-more-btn {
+    width: 150px;
+    line-height: 40px;
+    border-radius: 2px;
+    margin: 0 auto;
+    display: block;
+    background: #1d9c72;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+  }
 
-.pagination a.active {
-  background-color: #1d9c72;
-  color: white;
-  border-radius: 5px;
-}
-
-.pagination a:hover:not(.active) {
-  background-color: #ddd;
-  border-radius: 5px;
-}
-
+  .load-more-btn:hover{
+  	background: #005255;
+  }
 
 /*MEDIA  REQUIRMENTS_________________________________*/
 
@@ -407,10 +399,3 @@ header ul li a:hover{
 }
 
 }
-
-/*-profile page----------------------------------------------*/
-
-
-
-
-/*-profile page----------------------------------------------*/

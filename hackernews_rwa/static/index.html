@@ -94,17 +94,11 @@
 
 	<div id="b"></div>
 
-	<div class="pagination">
-	  <a href="#">&laquo;</a>
-	  <a href="#">1</a>
-	  <a href="#" class="active">2</a>
-	  <a href="#">3</a>
-	  <a href="#">4</a>
-	  <a href="#">5</a>
-	  <a href="#">6</a>
-	  <a href="#">&raquo;</a>
-	</div>
-
+	<div class="loadmore">
+		<label class="load-more-btn" for="load-more" id="load-more">
+	    	<span class="unloaded">LOAD MORE</span>
+	  	</label>  
+  	</div>
 
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
@@ -122,39 +116,79 @@
 
 	<script>
 
-lat = document.getElementById("latest");
-	if (lat) {
-  		lat.addEventListener("click", function (event) {
-    		event.preventDefault(); //prevent form submitting to host
-    		get_latest().then((response) => {
-      			if (response.status === 'success') {
-	        		location.reload();
-	        		load_posts();
-      			} else {
-        			alert(JSON.stringify(response))
-      			}
-    		});
-  		});
-	}
-
-	async function get_latest() {
-  		let url = "/api/posts?sort_by=new";
+async function get_latest() {
+	let url = "/api/posts?sort_by=new";
   	 		
-  		try {
-    		let response = await fetch(url, {
-      		method: 'GET'
-    	});
-    	response = await response.json();
+	try {
+   		let response = await fetch(url, {
+   		method: 'GET'
+	   	});
+   		response = await response.json();
     	console.log('Login response:', JSON.stringify(response));
     	return response;
-  		} catch (error) {
-    		console.log('Error: ', error);
-  		}
+  	} catch (error) {
+    	console.log('Error: ', error);
+  	}
+}
+
+
+lat = document.getElementById("latest");
+if (lat) {
+  	lat.addEventListener("click", function (event) {
+    	event.preventDefault(); //prevent form submitting to host
+    	get_latest().then((response) => {
+      		if (response.status === 'success') {
+	       		location.reload();
+	       		load_posts();
+      		} else {
+        		alert(JSON.stringify(response))
+      		}
+    	});
+  	});
+}
+
+page_val = 1;
+
+async function get_more(){
+	page_val = page_val + 1;
+	let url = '/api/posts?page_size=10&page='+page_val;
+	try {
+		let response = await fetch(url, {
+			method: 'GET'
+		});
+		//parse JSON response into native JavaScript object
+		more_posts = await response.json();
+		return more_posts.data;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+async function load_more() {
+	//delete currently shown tasks and load tasks again from api
+	//delete_tasks();
+	let posts = await get_more();
+	posts.forEach(show_post);
+}
+
+load = document.getElementById("load-more");
+if (load) {
+  	load.addEventListener("click", function (event) {
+    	event.preventDefault(); //prevent form submitting to host
+    	/*get_more().then((response) => {
+      		if (response.status === 'success') {
+	       		load_more();
+      		} else {
+        		alert(JSON.stringify(response))
+      		}
+    	});*/
+    	load_more();
+  	});
 }
 
 
 async function get_posts() {
-	let url = "/api/posts";
+	let url = "/api/posts?page_size=10";
 	try {
 		let response = await fetch(url, {
 			method: 'GET'
