@@ -69,7 +69,7 @@
 			</div>
 			<div>
 				<label for="password_conf">Password Confirmation</label>
-				<input type="password" name="passwordConf" class="text-input">
+				<input type="password" name="password_conf" class="text-input">
 			</div>
 			<div>
 				<button type="submit" name="signup-btn" class="btn btn-big">Sign Up</button>
@@ -111,10 +111,10 @@ async function register_user() {
   let uname = form["username"].value;
   let mail = form["email"].value;
   let pass = form["password"].value;
-  let pass_conf = form["password_conf"].value; 
+  let confirm_pass = form["password_conf"].value; 
 
   let url = "/api/users/";
-  let data = {username: uname,password: pass,email: mail, password_conf: pass_conf}
+  let data = {username: uname,password: pass,email: mail, confirm_password: confirm_pass}
   console.log(JSON.stringify(data));
   try {
     let response = await fetch(url, {

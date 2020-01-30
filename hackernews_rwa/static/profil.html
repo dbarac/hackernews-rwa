@@ -66,11 +66,11 @@
 				<div class="profile-usermenu">
 					<div class="nav">
 						<div class="karma">
-							Karma:
+							Karma: <span id="br-karme">10</span>
 							<i class="fas fa-meteor"></i>
 						</div>
 						<div class="created">
-							Profile created:
+							Profile created: <span id="date">1.1.2020.</span>
 							<i class="fas fa-dragon"></i>
 						</div>
 					</div>
@@ -176,81 +176,7 @@ async function show_post(post) {
 	let date = templateContent.querySelector(".displayDate");
 	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
 
-	// ________________________upvote & downvote__________________________
-
-	let upvote = $(templateContent.querySelector('.fa-chevron-up'));
-	let downvote = $(templateContent.querySelector('.fa-chevron-down'));
-
-	upvote.click(function () {
-
-		const previousVote = upvote.attr('data-voted');
-
-		if (previousVote === undefined) {
-			fetch(`/api/posts/${post.id}/votes`, {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ direction: 1 })
-			})
-				.then(response => response.json(), (err) => console.error(err))
-				.then(json => {
-					if (json.status === "success") {
-						upvote.attr('data-voted', '');
-						upvote.css('color', 'green');
-						downvote.attr('data-voted', null);
-						downvote.css('color', '#000000');
-					}
-				})
-		} else {
-			deleteVote(upvote, downvote, post.id);
-		}
-
-	});
-
-
-	downvote.click(function () {
-
-		const previousVote = downvote.attr('data-voted');
-
-		if (previousVote === undefined) {
-			fetch(`/api/posts/${post.id}/votes`, {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ direction: -1 })
-			})
-				.then(response => response.json())
-				.then(json => {
-					if (json.status === "success") {
-						upvote.attr('data-voted', null);
-						upvote.css('color', '#000000');
-						downvote.attr('data-voted', '');
-						downvote.css('color', 'red');
-					}
-				})
-		} else {
-			deleteVote(upvote, downvote, post.id);
-		}
-
-	});
-
-
-	function deleteVote(upvote, downvote, id) {
-		fetch(`/api/posts/${id}/votes`, {
-			method: "DELETE"
-		})
-			.then(response => response.json())
-			.then(json => {
-				if (json.status === "success") {
-					upvote.attr('data-voted', null);
-					upvote.css('color', '#000000');
-					downvote.attr('data-voted', null);
-					downvote.css('color', '#000000');
-				}
-			});
-	}
+	
 	//let p = templateContent.querySelector("p");
     //p.id = task.id;
 
@@ -276,8 +202,38 @@ async function user_is_logged_in() {
 	}
 }
 
+async function get_karma(){
+	let url = '/api/users/id/scores';
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		//alert(JSON.stringify(json));
+		return json;
+	} catch(error) {
+		console.log('Error: ', error);
+	}
+}
+
+async function get_datum(){
+	let url = '/api/users/';
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		alert(JSON.stringify(json));
+		return json;
+	} catch(error) {
+		console.log('Error: ', error);
+	}	
+}
+
 async function initialize_site() {
 	await load_posts();
+	let karmaa = await get_karma();
+	let datum = await get_datum();
 	let login_info = await user_is_logged_in();
 	if (login_info.status == 'success') {
 		//show logout link and tasks
@@ -290,7 +246,12 @@ async function initialize_site() {
 		//setup log out link
 		usrname = document.getElementById("usrname");
 		usrname.innerHTML = login_info.data.username;
-		
+
+		br_karme = document.getElementById("br-karme");
+		br_karme.innerHTML = karmaa.data.posts_score;
+
+		dat = document.getElementById("date");
+		dat.innerHTML = datum.data.nesto;
 	} else {
 		//show log in and register links
 		login_link = document.getElementById("login-link");

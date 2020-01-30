@@ -138,12 +138,6 @@ header ul li a:hover{
 	}
 	.content h1{
 		font-size: 16px;
-		color: black;
-	}
-	.content h1:hover{
-		
-		transition: 0.7s;
-		color: green;
 	}
 	.content-container{
 		padding-left: 270px;
@@ -254,41 +248,16 @@ header ul li a:hover{
 	text-decoration: underline;
 }
 
-.textbody{ /* ovo ti je za body od text make_post*/
-	padding: 4rem 1rem;
-	text-align: none;
-	display: block;
-	width: 100%;
-	border-radius: 5px;
-	border: 1px solid red;
-	font-size: 14px;
-	border: 1px solid #e0e0e0;
-	outline: none;
-	color: #444;
-	font-family: 'Lora', 'serif';
-}
-
 
 /* PROFILE CSS______________________________ */
-
-.profile-post-container{
-	display: flex;
-	flex-direction: row;
-}
-
-.profile-post-template{
-	flex-direction: row-reverse;
-	 border: 1px solid blue;
-
-}
 
 /* Profile container */
 .profile-container {
   margin: 20px 0;
+  height: 400px;
   width: 300px;
-  display: block;
+  display: flex;
   justify-content: center;
- border: 1px solid red;
   padding-left: 30px;
 }
 
@@ -299,7 +268,7 @@ header ul li a:hover{
 }
 
 .profile-userpic{
-	text-align: center;
+	padding-left: 100px;
 }
 
 .fa-user-astronaut{
@@ -323,16 +292,19 @@ header ul li a:hover{
 }
 
 .nav{
+	display: inline-flex;
 	flex-direction: row;
 }
 
 .karma{
+	align-self: flex-start;
+	padding-left: 15%;
+	padding-right: 35px;
 	font-family: 'Lora', 'serif';
-	width: 100%
-
 }
 
 .created{
+	align-self: flex-end;
 	padding-right: 5%;
 	font-family: 'Lora', 'serif';
 }
@@ -345,16 +317,14 @@ header ul li a:hover{
 }
 
 .fa-meteor{
-	color: red;
+	color: #f55e38;
 }
 
 .fa-dragon{
-	color: red;
+	color: #02b375;
 }
 
 /* SORT CSS */
-
-
 
 .sort{
 	padding-left: 5px;
@@ -401,7 +371,6 @@ header ul li a:hover{
 	background-color: #c8aa6e;
 
 }
-
 
 /*MEDIA  REQUIRMENTS_________________________________*/
 
