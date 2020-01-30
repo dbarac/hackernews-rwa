@@ -113,8 +113,9 @@ class UserAPI(MethodView):
 	def post(self):
 		#create new user
 		request_data = request.get_json()
-		username = request_data['username']
-		password = request_data['password']
+		username = request_data.get('username')
+		password = request_data.get('password')
+		confirm_password = request_data.get('confirm_password')
 		#email is optional, set as None if not found in request data
 		email = request_data.get('email', None)
 		db = get_db()
@@ -131,6 +132,10 @@ class UserAPI(MethodView):
 			errors['username'] = 'User {} is already registered.'.format(username)
 		if not password:
 			errors['password'] = 'Password is required'
+		elif not confirm_password:
+			errors['password'] = 'Password confirmation is required'
+		elif password != confirm_password:
+			errors['password'] = 'Passwords do not match'
 		if email is not None:
 			if len(email) > 0:
 				db_cursor.execute(
