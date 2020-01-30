@@ -134,7 +134,7 @@ async function show_post(post) {
 	votes.innerHTML = post.votes;
 
 	let userID = templateContent.querySelector(".displayUserID");
-	userID.innerHTML = post.user_id; //zamijeniti sa username
+	userID.innerHTML = post.username; //zamijeniti sa username
 
 	let date = templateContent.querySelector(".displayDate");
 	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
