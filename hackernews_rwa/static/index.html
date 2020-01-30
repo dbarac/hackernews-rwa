@@ -117,18 +117,24 @@
 	<script>
 
 async function get_latest() {
-	let url = "/api/posts?sort_by=new";
+	let url = "/api/posts?sort_by=new&page_size=1000";
   	 		
 	try {
    		let response = await fetch(url, {
-   		method: 'GET'
+   			method: 'GET'
 	   	});
    		response = await response.json();
     	console.log('Login response:', JSON.stringify(response));
-    	return response;
+    	return response.data;
   	} catch (error) {
     	console.log('Error: ', error);
   	}
+}
+
+async function load_latest() {
+	let posts = await get_latest();
+	delete_posts();
+	posts.forEach(show_post);
 }
 
 
@@ -136,16 +142,14 @@ lat = document.getElementById("latest");
 if (lat) {
   	lat.addEventListener("click", function (event) {
     	event.preventDefault(); //prevent form submitting to host
-    	get_latest().then((response) => {
-      		if (response.status === 'success') {
-	       		location.reload();
-	       		load_posts();
-      		} else {
-        		alert(JSON.stringify(response))
-      		}
-    	});
+    	//delete_posts();
+    	let hide = document.getElementById("load-more");
+    	hide.style.display = 'none';
+	    load_latest();
   	});
 }
+
+/* LOAD MORE ______________________*/
 
 page_val = 1;
 
@@ -186,6 +190,7 @@ if (load) {
   	});
 }
 
+/* HANDLING POSTS __________________*/
 
 async function get_posts() {
 	let url = "/api/posts?page_size=10";
@@ -211,10 +216,10 @@ async function load_posts() {
 	posts.forEach(show_post);
 }
 
-function delete_tasks() {
-	let tasks_container = document.getElementById("task-container");
-	while (tasks_container.firstChild) {
-    	tasks_container.removeChild(tasks_container.firstChild);
+function delete_posts() {
+	let posts_container = document.getElementById("b");
+	while (posts_container.firstChild) {
+    	posts_container.removeChild(posts_container.firstChild);
 	}
 }
 async function show_post(post) {
