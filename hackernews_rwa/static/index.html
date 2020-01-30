@@ -151,7 +151,7 @@ page_val = 1;
 
 async function get_more(){
 	page_val = page_val + 1;
-	let url = '/api/posts?page_size=5&page='+page_val;
+	let url = '/api/posts?page_size=10&page='+page_val;
 	try {
 		let response = await fetch(url, {
 			method: 'GET'
@@ -188,7 +188,7 @@ if (load) {
 
 
 async function get_posts() {
-	let url = "/api/posts?page_size=5";
+	let url = "/api/posts?page_size=10";
 	try {
 		let response = await fetch(url, {
 			method: 'GET'
