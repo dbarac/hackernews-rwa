@@ -19,7 +19,7 @@
 <body>
 	<header>
 		<div class="logo">
-			<h1 class="logo-text"><a href="index.html"><span>Na</span>Slov</a></h1>
+			<h1 class="logo-text"><a href="index.html"><span>Hacker</span>News</a></h1>
 		</div>
 		<i class="fa fa-bars menu-toggle"></i>
 		<ul class="nav">
@@ -83,7 +83,6 @@ if (login_form) {
     event.preventDefault(); //prevent form submitting to host
     login_user().then((response) => {
       if (response.status === 'success') {
-        window.alert("Korisnik je uspjesno ulogiran");
         window.location.replace("index.html");
       } else {
         alert(JSON.stringify(response))

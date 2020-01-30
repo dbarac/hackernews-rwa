@@ -14,12 +14,12 @@
 	<!-- Custom Styling -->
 	<link rel="stylesheet" href="style.css">
 
-	<title>NaSlov</title>
+	<title>HackerNews</title>
 </head>
 <body>
 	<header>
 		<div class="logo">
-			<h1 class="logo-text"><a href="index.html"><span>Na</span>Slov</a></h1>
+			<h1 class="logo-text"><a href="index.html"><span>Hacker</span>News</a></h1>
 		</div>
 		<i class="fa fa-bars menu-toggle"></i>
 		<ul class="nav">
@@ -27,13 +27,13 @@
 				<a href="#">Sort</a>
 				<ul>
 					<li>
-						<a href="#">Latest</a>
+						<a href="#" id="latest">Latest</a>
 					</li>
 					<li>
-						<a href="#">Top</a>
+						<a href="#" id="top">Top</a>
 					</li>
 					<li>
-						<a href="#">Rising</a>
+						<a href="#" id="rising">Rising</a>
 					</li>
 				</ul>
 
@@ -205,6 +205,35 @@ async function show_post(post) {
 		}
 
 	});
+
+	lat = document.getElementById("latest");
+	if (lat) {
+  		lat.addEventListener("click", function (event) {
+    		event.preventDefault(); //prevent form submitting to host
+    		get_latest().then((response) => {
+      			if (response.status === 'success') {
+	        		load_posts();
+      			} else {
+        			alert(JSON.stringify(response))
+      			}
+    		});
+  		});
+	}
+
+	async function get_latest() {
+  		let url = "/api/posts?page_size=15&page=2&sort_by=new";
+  		console.log(JSON.stringify(data));
+  		try {
+    		let response = await fetch(url, {
+      		method: 'GET'
+    	});
+    	response = await response.json();
+    	console.log('Login response:', JSON.stringify(response));
+    	return response;
+  		} catch (error) {
+    		console.log('Error: ', error);
+  		}
+}
 
 
 	downvote.click(function () {
