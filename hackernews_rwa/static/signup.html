@@ -97,7 +97,6 @@ if (register_form) {
     event.preventDefault(); //prevent form submitting to host
     register_user().then((response) => {
       if (response.status === 'success') {
-        window.alert("Uspjesno kreiran racun");
         window.location.replace("login.html");
       } else {
         alert(JSON.stringify(response))
