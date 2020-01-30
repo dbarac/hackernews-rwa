@@ -41,13 +41,21 @@
 						<i class="far calendar"></i>
 						<i class="displayDate">
 					</div>
-
 				</div>
 
 			</div>
 
 		</div>
+		<div>
+			<div>
+				<div class="textBody">
+					<i class="displaybody" style="word-wrap: break-word">
+				</div>
+			</div>
+		</div>
+		
 </template>
+
 
 	<div id="b"></div>
 
@@ -81,13 +89,20 @@ const urlParams = new URLSearchParams(queryString);
 const wantedPost = urlParams.get('id');
 console.log(wantedPost);
 
+async function compare(post) {
+	if(wantedPost == post.id){
+		show_post(post);
+	}
+}
+
+
 
 
 async function load_posts() {
 	//delete currently shown tasks and load tasks again from api
 	//delete_tasks();
 	let posts = await get_posts();
-	posts.forEach(show_post);
+	posts.forEach(compare);
 }
 
 function delete_tasks() {
@@ -106,15 +121,20 @@ async function show_post(post) {
 	votes.innerHTML = post.votes;
 
 	let userID = templateContent.querySelector(".displayUserID");
-	userID.innerHTML = post.user_id; //zamijeniti sa username
+	userID.innerHTML = post.username; //zamijeniti sa username
 
 	let date = templateContent.querySelector(".displayDate");
 	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
+
+	let bodyPO = templateContent.querySelector(".displaybody");
+	bodyPO.innerHTML = post.body;
+
 
 	if(post.url == ""){
 		link = templateContent.querySelector("a");
 		link.href = "single.html?id=" + post.id;
 	}else{
+		h1.innerHTML += " (link)";
 		link = templateContent.querySelector("a");
 		link.href = post.url;
 	}
