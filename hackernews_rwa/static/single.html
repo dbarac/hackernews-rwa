@@ -47,7 +47,7 @@
 </header>
 
 
-<!-- Task template -->
+<!-- Post template -->
 <template id="post-template">
 	<div class="content clearfix">
 
@@ -85,7 +85,28 @@
 </template>
 
 
+<template id="comment-template">
+<div class="comment" style="margin-left: 30px; padding: 5px">
+	<b><span class="user_id" style="font-size: 12px"></span></b><br>
+	<span class="body" style="background-color: white;"></span><br>
+</div>
+</template>
+
 	<div id="b"></div>
+
+	<form action="signup.html" id="new_comment">
+			<div>
+				<label for="username">New comment</label><br>
+				<textarea rows="4" cols="50" name="body" form="new_comment"></textarea>
+			</div>
+			<div>
+				<button type="submit" name="submit-btn" class="btn" id="submitc">Submit</button>
+			</div>
+		</form>
+
+	<div id="comments">
+	<h4>Comments:</h4>
+	</div>
 
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
@@ -108,6 +129,20 @@ async function get_posts() {
 	}
 }
 
+async function get_comments(wantedPost) {
+	let url = "/api/posts/" + wantedPost + "/comments";
+	try {
+		let response = await fetch(url, {
+			method: 'GET'
+		});
+		//parse JSON response into native JavaScript object
+		comments = await response.json();
+		return comments.data;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
 
 var posts = 0;
 
@@ -124,11 +159,39 @@ async function compare(post) {
 }
 
 
+comment_submit= document.getElementById("new_comment");
+if (comment_submit) {
+  comment_submit.addEventListener("submit", function (event) {
+    event.preventDefault(); //prevent form submitting to host
+    	alert("B")
+    	make_comment(wantedPost).then(() => {})
+  });
+}
 
+async function make_comment(wantedPost) {
+  let form = document.getElementById("new_comment");
+  let content = form["body"].value;
 
+  let url = "/api/posts/" + wantedPost + "/comments";
+  let data = {body: content}
+  console.log(JSON.stringify(data));
+  try {
+    let response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    response = await response.json();
+    console.log('Register response:', JSON.stringify(response));
+    return response;
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+
+}
 async function load_posts() {
-	//delete currently shown tasks and load tasks again from api
-	//delete_tasks();
 	let posts = await get_posts();
 	posts.forEach(compare);
 }
@@ -139,6 +202,44 @@ function delete_tasks() {
     	tasks_container.removeChild(tasks_container.firstChild);
 	}
 }
+
+async function load_comments() {
+	let comments = await get_comments(wantedPost);
+	comments.forEach(show_comment);
+}
+
+
+async function show_comment(comment) {
+	let comment_template = document.getElementById("comment-template");
+	let templateContent = comment_template.content.cloneNode(true); //napravi kopiju predloska
+	let comment_div = templateContent.querySelector(".comment");
+	comment_div.id = comment.id;
+
+	let body = templateContent.querySelector(".body");
+	body.innerHTML = comment.body;
+
+	let user_id = templateContent.querySelector(".user_id");
+	user_id.innerHTML = comment.username;
+
+	if (comment.parent_id != null) {
+		let comments_container = document.getElementById(comment.parent_id);
+		comments_container.appendChild(templateContent);
+	} else {
+		let comments_container = document.getElementById("comments");
+		comments_container.appendChild(templateContent);
+	}
+	
+	/* ________________________upvote & downvote__________________________*/
+
+	//let upvote = $(templateContent.querySelector('.fa-chevron-up'));
+	//let downvote = $(templateContent.querySelector('.fa-chevron-down'));
+
+
+	
+}
+
+
+
 async function show_post(post) {
 	let post_template = document.getElementById("post-template");
 	let templateContent = post_template.content.cloneNode(true); //napravi kopiju predloska
@@ -282,6 +383,7 @@ async function initialize_site() {
 		register_link = document.getElementById("signup-link");
 		register_link.style.display = "initial";
 	}
+	await load_comments();
 }
 
 //setup log out link
