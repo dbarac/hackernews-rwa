@@ -202,22 +202,21 @@ async function user_is_logged_in() {
 	}
 }
 
-async function get_karma(){
-	let url = '/api/users/id/scores';
+async function get_karma(id){
+	let url = '/api/users/'+id+'/scores';
 	try {
 		const response = await fetch(url, {
 			method: 'GET'
 		});
 		const json = await response.json();
-		//alert(JSON.stringify(json));
 		return json;
 	} catch(error) {
 		console.log('Error: ', error);
 	}
 }
 
-async function get_datum(){
-	let url = '/api/users/';
+async function get_datum(id){
+	let url = '/api/users/'+id+'/created';
 	try {
 		const response = await fetch(url, {
 			method: 'GET'
@@ -232,8 +231,6 @@ async function get_datum(){
 
 async function initialize_site() {
 	await load_posts();
-	let karmaa = await get_karma();
-	let datum = await get_datum();
 	let login_info = await user_is_logged_in();
 	if (login_info.status == 'success') {
 		//show logout link and tasks
@@ -247,9 +244,11 @@ async function initialize_site() {
 		usrname = document.getElementById("usrname");
 		usrname.innerHTML = login_info.data.username;
 
+		let karmaa = await get_karma(login_info.data.id);
 		br_karme = document.getElementById("br-karme");
 		br_karme.innerHTML = karmaa.data.posts_score;
 
+		let datum = await get_datum(login_info.data.id);
 		dat = document.getElementById("date");
 		dat.innerHTML = datum.data.nesto;
 	} else {

@@ -61,16 +61,6 @@
 		</ul>
 </header>
 
-<!--<div class="sort">
-	<button class="sortbtn">Sort</button>
-		<div class="sort-content">
-			<a href="#">Best</a>
-			<a href="#">New</a>
-		</div>
-</div>-->
-
-
-
 <!-- Task template -->
 <template id="post-template">
 	<div class="content clearfix">
@@ -104,6 +94,18 @@
 
 	<div id="b"></div>
 
+	<div class="pagination">
+	  <a href="#">&laquo;</a>
+	  <a href="#">1</a>
+	  <a href="#" class="active">2</a>
+	  <a href="#">3</a>
+	  <a href="#">4</a>
+	  <a href="#">5</a>
+	  <a href="#">6</a>
+	  <a href="#">&raquo;</a>
+	</div>
+
+
 	<!-- JQuery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
 
@@ -119,6 +121,38 @@
 
 
 	<script>
+
+lat = document.getElementById("latest");
+	if (lat) {
+  		lat.addEventListener("click", function (event) {
+    		event.preventDefault(); //prevent form submitting to host
+    		get_latest().then((response) => {
+      			if (response.status === 'success') {
+	        		location.reload();
+	        		load_posts();
+      			} else {
+        			alert(JSON.stringify(response))
+      			}
+    		});
+  		});
+	}
+
+	async function get_latest() {
+  		let url = "/api/posts?sort_by=new";
+  	 		
+  		try {
+    		let response = await fetch(url, {
+      		method: 'GET'
+    	});
+    	response = await response.json();
+    	console.log('Login response:', JSON.stringify(response));
+    	return response;
+  		} catch (error) {
+    		console.log('Error: ', error);
+  		}
+}
+
+
 async function get_posts() {
 	let url = "/api/posts";
 	try {
@@ -205,36 +239,6 @@ async function show_post(post) {
 		}
 
 	});
-
-	lat = document.getElementById("latest");
-	if (lat) {
-  		lat.addEventListener("click", function (event) {
-    		event.preventDefault(); //prevent form submitting to host
-    		get_latest().then((response) => {
-      			if (response.status === 'success') {
-	        		load_posts();
-      			} else {
-        			alert(JSON.stringify(response))
-      			}
-    		});
-  		});
-	}
-
-	async function get_latest() {
-  		let url = "/api/posts?page_size=15&page=2&sort_by=new";
-  		console.log(JSON.stringify(data));
-  		try {
-    		let response = await fetch(url, {
-      		method: 'GET'
-    	});
-    	response = await response.json();
-    	console.log('Login response:', JSON.stringify(response));
-    	return response;
-  		} catch (error) {
-    		console.log('Error: ', error);
-  		}
-}
-
 
 	downvote.click(function () {
 
