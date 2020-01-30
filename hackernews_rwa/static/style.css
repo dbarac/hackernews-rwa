@@ -324,6 +324,56 @@ header ul li a:hover{
 	color: red;
 }
 
+/* SORT CSS */
+
+
+
+.sort{
+	padding-left: 5px;
+}
+
+.sortbtn{
+	background-color: transparent;
+	border: 2px solid #c8aa6e;
+	color: black;
+	text-align: center;
+	font-size: 15px;
+	height: 30px;
+	width: 60px;
+}
+
+.sortbtn:hover{
+	background-color: #c8aa6e;
+	cursor: pointer;
+}
+
+.sort-content{
+	display: none;
+	position: absolute;
+	background-color: black;
+	min-width: 160px;
+}
+
+.sort-content a{
+	color: #8a8a8a;
+  	padding: 12px 16px;
+  	text-decoration: none;
+  	display: block;
+}
+
+.sort-content a:hover {
+	color: #c8aa6e;
+}
+
+.sort:hover .sort-content{
+	display: block;
+}
+
+.sort:hover .sortbtn{
+	background-color: #c8aa6e;
+
+}
+
 
 /*MEDIA  REQUIRMENTS_________________________________*/
 

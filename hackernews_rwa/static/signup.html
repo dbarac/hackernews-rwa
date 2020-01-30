@@ -17,7 +17,34 @@
 	<title>SignUp</title>
 </head>
 <body>
-	<div id="header"></div>
+	<header>
+		<div class="logo">
+			<h1 class="logo-text"><a href="index.html"><span>Na</span>Slov</a></h1>
+		</div>
+		<i class="fa fa-bars menu-toggle"></i>
+		<ul class="nav">
+			<li><a href="index.html" >Home</a></li>
+			<li><a href="#">About</a></li>
+
+			<li id="signup-link" style="display: none;"><a href="signup.html">Sing Up</a></li>
+			<li id="login-link" style="display: none;"><a href="login.html">Login</a></li> 
+			<li id="user-menu" style="display: none;">
+
+				<a href="#">
+					<i class="fa fa-user"></i>
+					<span id="uname">User7374</span>
+					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
+				</a>
+				<ul>
+
+					<li><a href="profil.html">Dashboard</a></li>
+					<li><a id="logout-link" href="index.html" class="logout">Logout</a>
+					</li>
+
+				</ul>
+			</li>
+		</ul>
+</header>
 	
 	<div class="auth-content">
 		
@@ -84,9 +111,10 @@ async function register_user() {
   let uname = form["username"].value;
   let mail = form["email"].value;
   let pass = form["password"].value;
+  let pass_conf = form["password_conf"].value; 
 
   let url = "/api/users/";
-  let data = {username: uname,password: pass,email: mail}
+  let data = {username: uname,password: pass,email: mail, password_conf: pass_conf}
   console.log(JSON.stringify(data));
   try {
     let response = await fetch(url, {
