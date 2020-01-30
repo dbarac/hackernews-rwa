@@ -108,6 +108,13 @@ header ul li a:hover{
 	
 }
 
+.aboutBody{
+	margin-left: 100px;
+}
+
+.aboutBody h1{
+	margin-left: -40px;
+}
 /*	CONTENT______________________________________________________________________________*/
 	.content {
 		width: 70%;
@@ -243,9 +250,8 @@ header ul li a:hover{
 /* Profile container */
 .profile-container {
   margin: 20px 0;
-  height: 400px;
   width: 300px;
-  display: flex;
+  display: block;
   justify-content: center;
   padding-left: 30px;
 }
@@ -352,7 +358,7 @@ header ul li a:hover{
 	}
 	header ul{
 		width: 100%;
-		background-color: #0E94A0;
+		background-color: #098058;
 		max-height: 0px;
 		overflow: hidden;
 	}
@@ -368,15 +374,18 @@ header ul li a:hover{
 		display: block;
 		width: 100%;
 	}
+	header ul li ul a:hover{
+		background: #1d9c72;
+	}
 		header ul li ul li a{
 		padding: 10px;
-		background:  #0E94A0;
+		background:  #098058;
 		color: white;
 		padding-left: 50px;
 	}
 
 		header ul li ul li a:hover{
-			background: #006669;
+			background: #1d9c72;
 		}	
 
 		header ul li ul li a.logout{
@@ -392,6 +401,10 @@ header ul li a:hover{
 	header .logo {
 	margin-left: 2em;
 	}
+	.nav{
+	display: flex;
+	flex-direction: column;
+}
 
 }
 

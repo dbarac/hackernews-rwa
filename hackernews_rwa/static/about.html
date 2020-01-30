@@ -1,40 +1,228 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset ="utf-8"/>
-	<title>About us</title>
-	<link rel="stylesheet" href="styles.css">
-	<script src="index.js" type="text/javascript"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<!-- Font Awesome -->
+	<script src="https://kit.fontawesome.com/0e77fb0d99.js" crossorigin="anonymous"></script>
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Candal|Lora|Raleway|Titillium+Web&display=swap" rel="stylesheet"> 
+
+	<!-- Custom Styling -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>Dashboard</title>
 </head>
-<body style="overflow: hidden;">
-	<div class="container">
-		<div class="nav-wrapper">
-			<div class="left-side">
-				<div class="nav-link-wrapper">
-					<a href="index.html">Home</a>
-				</div>
-
-				<div class="nav-link-wrapper">
-					<a href="about.html" style ="color: #c8aa6e" >About</a>
-				</div>
-
-			</div>
-
-			<div class="right-side">
-				<div class="nav-link-wrapper">
-					<a href="signup.html">Sign up</a>
-				</div>
-
-				<div class="nav-link-wrapper">
-					<a href="login.html">Log in</a>
-				</div>
-			</div>
+<body>
+	<header>
+		<div class="logo">
+			<h1 class="logo-text"><a href="index.html"><span>Hacker</span>News</a></h1>
 		</div>
-		</div>
-	<div id="mainbody">
-		Skrolaj me 
-  		<strong>ako se usudis</strong>.
-  	</div>
-  
+		<i class="fa fa-bars menu-toggle"></i>
+		<ul class="nav">
+			<li><a href="index.html" >Home</a></li>
+			<li><a href="about.html">About</a></li>
+
+			<li id="signup-link" style="display: none;"><a href="signup.html">Sing Up</a></li>
+			<li id="login-link" style="display: none;"><a href="login.html">Login</a></li> 
+			<li id="user-menu" style="display: none;">
+
+				<a href="#">
+					<i class="fa fa-user"></i>
+					<span id="uname"></span>
+					<i class="fa fa-chevron-down" style="font-size: .8em "></i>
+				</a>
+				<ul>
+
+					<li><a href="profil.html">Dashboard</a></li>
+					<li><a id="logout-link" href="index.html" class="logout">Logout</a>
+					</li>
+
+				</ul>
+			</li>
+		</ul>
+</header>
+<div class="aboutBody">
+	<h1>Made by:</h1>
+	<h2>Dario Barać</h2>
+	<h2>Filip Grgur</h2>
+	<h2>Chiara Vratović</h2>
+	</div>
+
+	<!-- profile sidebar -->
+
+
+<div id="b"></div>
+
+	
+	<!-- JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" ></script>
+
+	<!-- Custom Script-->
+	<script src="scripts.js"></script>
+
+<script>
+	async function get_posts() {
+	let url = "/api/posts";
+	try {
+		let response = await fetch(url, {
+			method: 'GET'
+		});
+		//parse JSON response into native JavaScript object
+		posts = await response.json();
+		return posts.data;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+var posts = 0;
+
+async function compare(post) {
+	let login_info = await user_is_logged_in();
+	if(login_info.data.id === post.user_id){
+		show_post(post);
+	}
+}
+
+async function load_posts() {
+	//delete currently shown tasks and load tasks again from api
+	//delete_tasks();
+	let posts = await get_posts();
+	posts.forEach(compare);
+//	posts.forEach(show_post);
+}
+
+function delete_tasks() {
+	let tasks_container = document.getElementById("task-container");
+	while (tasks_container.firstChild) {
+    	tasks_container.removeChild(tasks_container.firstChild);
+	}
+}
+async function show_post(post) {
+	let post_template = document.getElementById("post-template");
+	let templateContent = post_template.content.cloneNode(true); //napravi kopiju predloska
+	let h1 = templateContent.querySelector("h1");
+	h1.innerHTML = post.title;
+
+	let votes = templateContent.querySelector(".displayVotes");
+	votes.innerHTML = post.votes;
+
+	let userID = templateContent.querySelector(".displayUserID");
+	userID.innerHTML = post.user_id; //zamijeniti sa username
+
+	let date = templateContent.querySelector(".displayDate");
+	date.innerText = post.created.split(' ').slice(1, 4).join(' ');
+
+	
+	//let p = templateContent.querySelector("p");
+    //p.id = task.id;
+
+	let posts_container = document.getElementById("b");
+	posts_container.appendChild(templateContent);
+}
+
+
+// inicijalizacija stranice, headera i logouta
+
+window.onload = initialize_site;
+
+async function user_is_logged_in() {
+	let url = "/api/sessions/";
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+async function get_karma(id){
+	let url = '/api/users/'+id+'/scores';
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		return json;
+	} catch(error) {
+		console.log('Error: ', error);
+	}
+}
+
+async function get_datum(id){
+	let url = '/api/users/'+id+'/created';
+	try {
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		const json = await response.json();
+		alert(JSON.stringify(json));
+		return json;
+	} catch(error) {
+		console.log('Error: ', error);
+	}	
+}
+
+async function initialize_site() {
+	await load_posts();
+	let login_info = await user_is_logged_in();
+	if (login_info.status == 'success') {
+		//show logout link and tasks
+		//alert(JSON.stringify(login_info.data));
+		user_menu = document.getElementById("user-menu");
+		user_menu.style.display = "initial";
+		user_menu.querySelector("#uname").innerHTML = login_info.data.username;
+		//tasks_div = document.getElementById("task-form");
+		//tasks_div.style.display = "initial";
+		//setup log out link
+		usrname = document.getElementById("usrname");
+		usrname.innerHTML = login_info.data.username;
+
+		let karmaa = await get_karma(login_info.data.id);
+		br_karme = document.getElementById("br-karme");
+		br_karme.innerHTML = karmaa.data.posts_score;
+
+		let datum = await get_datum(login_info.data.id);
+		dat = document.getElementById("date");
+		dat.innerHTML = datum.data.nesto;
+	} else {
+		//show log in and register links
+		login_link = document.getElementById("login-link");
+		login_link.style.display = "initial";
+
+		register_link = document.getElementById("signup-link");
+		register_link.style.display = "initial";
+	}
+}
+
+//setup log out link
+logout_link = document.getElementById("logout-link");
+logout_link.addEventListener("click", function (event) {
+	event.preventDefault(); 
+	logout_user().then(() => {
+		window.location.replace("index.html");
+	});
+});
+
+async function logout_user() {
+	let url = "/api/sessions/";
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+		});
+	} catch (error) {
+		console.log('Error: ', error);
+	}
+}
+
+	</script>
+
 </body>
-</html> 
+</html>
